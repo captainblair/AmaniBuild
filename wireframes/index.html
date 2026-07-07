@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AmaniBuild — Wireframe Catalog (Frozen)</title>
+  <link rel="stylesheet" href="assets/wireframe.css">
+  <style>
+    body { background: var(--gray-bg); }
+    .catalog-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 48px 0;
+    }
+    .catalog-header h1 { color: var(--white); margin-bottom: 8px; }
+    .catalog-header p { color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.6; }
+    .freeze-banner {
+      background: rgba(249,115,22,0.15);
+      border: 1px solid rgba(249,115,22,0.4);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-top: 24px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+    }
+    .freeze-banner strong { color: var(--orange); }
+    .stats { display: flex; gap: 20px; margin-top: 24px; flex-wrap: wrap; }
+    .stat { background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: var(--radius); }
+    .stat strong { display: block; font-size: 1.5rem; color: var(--orange); }
+    .stat span { font-size: 12px; color: rgba(255,255,255,0.6); }
+    .catalog-body { padding: 40px 0 80px; }
+    .category { margin-bottom: 44px; }
+    .category h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+    .category .tier-desc {
+      font-size: 13px;
+      color: var(--gray-light);
+      margin-bottom: 16px;
+    }
+    .screen-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+    .screen-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--navy);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .screen-card:hover { border-color: var(--orange); box-shadow: var(--shadow); }
+    .screen-card.frozen { border-left: 3px solid var(--green); }
+    .screen-card.deferred { opacity: 0.5; pointer-events: none; }
+    .screen-card.new-wf { border-left: 3px solid var(--orange); }
+    .screen-num {
+      width: 36px; height: 36px;
+      background: var(--gray-bg);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .screen-card.frozen .screen-num,
+    .screen-card.new-wf .screen-num { background: rgba(21,128,61,0.12); color: var(--green); }
+    .screen-info h3 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .screen-info span { font-size: 12px; color: var(--gray-light); }
+    .tag {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .tag-build { background: rgba(249,115,22,0.12); color: var(--orange); }
+    .tag-done { background: rgba(21,128,61,0.12); color: var(--green); }
+    .tag-new { background: rgba(249,115,22,0.15); color: #c2410c; }
+    .tag-later { background: var(--gray-bg); color: var(--gray-light); }
+    .build-list {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 44px;
+    }
+    .build-list h2 { font-size: 1rem; margin-bottom: 12px; color: var(--navy); }
+    .build-list ol { padding-left: 20px; color: var(--gray); font-size: 14px; line-height: 1.9; }
+    .build-list ol strong { color: var(--gray-800, #1e293b); }
+  </style>
+</head>
+<body>
+
+  <header class="catalog-header">
+    <div class="container">
+      <div class="logo" style="color: var(--white); margin-bottom: 24px;">
+        <div class="logo-icon">AB</div>
+        AmaniBuild
+      </div>
+      <h1>Wireframe Catalog — Frozen</h1>
+      <p>MVP wireframe set complete. 31 screens covering all core modules. Production build is paused until go-ahead.</p>
+      <div class="freeze-banner">
+        <strong>Phase 2 — Wireframes frozen.</strong> Tier 1 screens below are the build-first reference. Remaining wireframes support full MVP scope. Post-MVP modules are mapped but not wireframed.
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>31</strong><span>Wireframes done</span></div>
+        <div class="stat"><strong>12</strong><span>Build-first (Tier 1)</span></div>
+        <div class="stat"><strong>19</strong><span>Supporting (Tier 2)</span></div>
+        <div class="stat"><strong>—</strong><span>Post-MVP deferred</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="catalog-body">
+    <div class="container">
+
+      <section class="build-list">
+        <h2>Tier 1 — Build first (when development starts)</h2>
+        <ol>
+          <li><strong>Homepage</strong> — Homepage1.png</li>
+          <li><strong>Auth</strong> — login.png, registration.png, otp verification.png</li>
+          <li><strong>Onboarding</strong> — site creation step 1, invite team roles</li>
+          <li><strong>Dashboard shell</strong> — foreman homescreen.png (reuse for roles via RBAC)</li>
+          <li><strong>Projects</strong> — projects list page, project detail overview</li>
+          <li><strong>Site diary</strong> — new daily site diary entry, daily site diary history timeline</li>
+          <li><strong>Attendance</strong> — attendance tracking dashboard, worker mobile clock in tasks</li>
+          <li><strong>Procurement</strong> — procurement purchase approval</li>
+        </ol>
+      </section>
+
+      <!-- TIER 1 -->
+      <section class="category">
+        <h2>Tier 1 — Build reference</h2>
+        <p class="tier-desc">Implement these first. Highest fidelity. Frozen.</p>
+        <div class="screen-grid">
+          <a href="Homepage1.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Homepage</h3><span>Marketing hero</span></div><span class="tag tag-build">Build</span></a>
+          <a href="login.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Login</h3><span>Auth</span></div><span class="tag tag-build">Build</span></a>
+          <a href="registration.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Registration</h3><span>Auth</span></div><span class="tag tag-build">Build</span></a>
+          <a href="otp verification.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>OTP Verification</h3><span>Auth</span></div><span class="tag tag-build">Build</span></a>
+          <a href="onboarding wizard site creation step 1.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Onboarding — Site Setup</h3><span>Wizard step 1</span></div><span class="tag tag-build">Build</span></a>
+          <a href="onboarding invite team roles.png" class="screen-card frozen new-wf"><div class="screen-num">T1</div><div class="screen-info"><h3>Onboarding — Invite Team</h3><span>Wizard step 3</span></div><span class="tag tag-new">New</span></a>
+          <a href="foreman homescreen.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Dashboard Shell</h3><span>Foreman — reuse for RBAC</span></div><span class="tag tag-build">Build</span></a>
+          <a href="projects list page.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Projects List</h3><span>Table + card views</span></div><span class="tag tag-build">Build</span></a>
+          <a href="project detail overview.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Project Detail</h3><span>Overview + tabs</span></div><span class="tag tag-build">Build</span></a>
+          <a href="new daily site diary entry.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>New Diary Entry</h3><span>Form + live preview</span></div><span class="tag tag-build">Build</span></a>
+          <a href="daily site diary history timeline.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Diary History</h3><span>Timeline feed</span></div><span class="tag tag-build">Build</span></a>
+          <a href="attendance tracking dashboard.png" class="screen-card frozen"><div class="screen-num">T1</div><div class="screen-info"><h3>Attendance Dashboard</h3><span>QR + worker grid</span></div><span class="tag tag-build">Build</span></a>
+          <a href="worker mobile clock in tasks.png" class="screen-card frozen new-wf"><div class="screen-num">T1</div><div class="screen-info"><h3>Worker Mobile</h3><span>Clock in + tasks</span></div><span class="tag tag-new">New</span></a>
+          <a href="procurement purchase approval.png" class="screen-card frozen new-wf"><div class="screen-num">T1</div><div class="screen-info"><h3>Procurement Approval</h3><span>PO request flow</span></div><span class="tag tag-new">New</span></a>
+        </div>
+      </section>
+
+      <!-- TIER 2 -->
+      <section class="category">
+        <h2>Tier 2 — MVP supporting screens</h2>
+        <p class="tier-desc">Wireframed. Build after Tier 1 or in parallel once core loops work.</p>
+        <div class="screen-grid">
+          <a href="Password reset flow.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Password Reset</h3><span>Auth</span></div><span class="tag tag-done">Done</span></a>
+          <a href="Marketing homepage features section.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Features Section</h3><span>Marketing</span></div><span class="tag tag-done">Done</span></a>
+          <a href="Testimonials.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Testimonials</h3><span>Marketing</span></div><span class="tag tag-done">Done</span></a>
+          <a href="pricing plans.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Pricing Plans</h3><span>Marketing</span></div><span class="tag tag-done">Done</span></a>
+          <a href="Main sidebar nav expanded.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Sidebar Navigation</h3><span>Nav states reference</span></div><span class="tag tag-done">Done</span></a>
+          <a href="owner executive dashboard.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Owner Dashboard</h3><span>Portfolio KPIs</span></div><span class="tag tag-done">Done</span></a>
+          <a href="project manager dashboard.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>PM Dashboard</h3><span>Project portfolio</span></div><span class="tag tag-done">Done</span></a>
+          <a href="site eng daily overview.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Site Engineer Dashboard</h3><span>Daily overview</span></div><span class="tag tag-done">Done</span></a>
+          <a href="project scheduling gantt chart.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Gantt / Scheduling</h3><span>Timeline</span></div><span class="tag tag-done">Done</span></a>
+          <a href="inventory stock management.png" class="screen-card frozen new-wf"><div class="screen-num">T2</div><div class="screen-info"><h3>Inventory Management</h3><span>Stock + alerts</span></div><span class="tag tag-new">New</span></a>
+          <a href="expenses receipt logging.png" class="screen-card frozen new-wf"><div class="screen-num">T2</div><div class="screen-info"><h3>Expenses &amp; Receipts</h3><span>Finance log</span></div><span class="tag tag-new">New</span></a>
+          <a href="documents photos library.png" class="screen-card frozen new-wf"><div class="screen-num">T2</div><div class="screen-info"><h3>Documents Library</h3><span>Files + photos</span></div><span class="tag tag-new">New</span></a>
+          <a href="reports analytics hub.png" class="screen-card frozen new-wf"><div class="screen-num">T2</div><div class="screen-info"><h3>Reports Hub</h3><span>Export + PDF</span></div><span class="tag tag-new">New</span></a>
+          <a href="notifications center activity feed.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Notifications Center</h3><span>Alerts + feed</span></div><span class="tag tag-done">Done</span></a>
+          <a href="team communication collaboration.png" class="screen-card frozen"><div class="screen-num">T2</div><div class="screen-info"><h3>Team Messaging</h3><span>Channels + chat</span></div><span class="tag tag-done">Done</span></a>
+          <a href="tasks board assignments.png" class="screen-card frozen new-wf"><div class="screen-num">T2</div><div class="screen-info"><h3>Tasks Board</h3><span>Kanban</span></div><span class="tag tag-new">New</span></a>
+          <a href="client portal progress view.png" class="screen-card frozen new-wf"><div class="screen-num">T2</div><div class="screen-info"><h3>Client Portal</h3><span>Read-only progress</span></div><span class="tag tag-new">New</span></a>
+        </div>
+      </section>
+
+      <!-- POST-MVP -->
+      <section class="category">
+        <h2>Post-MVP — Not wireframed (build from patterns)</h2>
+        <p class="tier-desc">Use Tier 1/2 components when needed. No separate wireframes required before pilot.</p>
+        <div class="screen-grid">
+          <div class="screen-card deferred"><div class="screen-num">—</div><div class="screen-info"><h3>Equipment Management</h3><span>Assets + maintenance</span></div><span class="tag tag-later">Later</span></div>
+          <div class="screen-card deferred"><div class="screen-num">—</div><div class="screen-info"><h3>HR / Payroll Detail</h3><span>Beyond attendance export</span></div><span class="tag tag-later">Later</span></div>
+          <div class="screen-card deferred"><div class="screen-num">—</div><div class="screen-info"><h3>Super Admin Console</h3><span>Platform tenancy</span></div><span class="tag tag-later">Later</span></div>
+          <div class="screen-card deferred"><div class="screen-num">—</div><div class="screen-info"><h3>Supplier Portal</h3><span>Vendor quotes</span></div><span class="tag tag-later">Later</span></div>
+          <div class="screen-card deferred"><div class="screen-num">—</div><div class="screen-info"><h3>Safety Incidents</h3><span>Post-MVP module</span></div><span class="tag tag-later">Later</span></div>
+          <div class="screen-card deferred"><div class="screen-num">—</div><div class="screen-info"><h3>Quality Assurance</h3><span>Checklists</span></div><span class="tag tag-later">Later</span></div>
+          <div class="screen-card deferred"><div class="screen-num">—</div><div class="screen-info"><h3>Calendar View</h3><span>Milestones</span></div><span class="tag tag-later">Later</span></div>
+          <div class="screen-card deferred"><div class="screen-num">—</div><div class="screen-info"><h3>Settings &amp; Billing</h3><span>Company admin</span></div><span class="tag tag-later">Later</span></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</body>
+</html>
