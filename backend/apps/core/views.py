@@ -38,7 +38,7 @@ class HealthCheckView(APIView):
                 "status": status_label,
                 "service": "amanibuild-api",
                 "version": "0.1.0",
-                "phase": "8-inventory",
+                "phase": "17-scheduling",
                 "checks": {
                     "database": {"ok": db_ok, "error": db_error},
                 },

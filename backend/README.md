@@ -1,4 +1,4 @@
-# AmaniBuild Backend — Phase 8
+# AmaniBuild Backend — Phase 17 (MVP complete)
 
 Foundation layer for the AmaniBuild construction management API.
 
@@ -58,6 +58,15 @@ backend/
 │   ├── attendance/    # Worker attendance & QR check-in
 │   ├── procurement/   # Purchase requests & approvals
 │   ├── inventory/     # Materials & stock management
+│   ├── tasks/         # Task board and assignments
+│   ├── documents/     # Documents, photos, and version history
+│   ├── notifications/ # Notifications center and activity feed
+│   ├── messaging/     # Team communication and project channels
+│   ├── reports/       # Reports, exports, and analytics
+│   ├── inspections/   # QA/QC inspections
+│   ├── expenses/      # Expenses & receipts
+│   ├── client_portal/ # Client portal access & views
+│   ├── scheduling/    # Gantt / project scheduling
 │   └── core/          # Shared models, health check, API standards
 ├── config/
 │   ├── settings/      # base, development, production, test
@@ -233,6 +242,172 @@ Stock status: **on_track**, **at_risk** (&lt;100% of reorder), **low_stock** (&l
 
 **Wireframes:** inventory stock management
 
-## Next phase
+## Phase 9 — Tasks (complete)
 
-**Phase 9 — Tasks**
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/tasks/board/` | GET | Kanban board grouped by status (`?project_id=&assignee_id=&priority=`) |
+| `/api/v1/tasks/` | GET | Paginated task list with filters |
+| `/api/v1/tasks/` | POST | Create task (`project_id`, `title`, optional assignee/priority/due date) |
+| `/api/v1/tasks/my/` | GET | Current user's assigned tasks + summary KPIs |
+| `/api/v1/tasks/<id>/` | GET/PATCH/DELETE | Detail / update / archive |
+| `/api/v1/tasks/<id>/status/` | POST | Move task on board (managers or assignee) |
+| `/api/v1/tasks/<id>/comments/` | GET/POST | Comment thread + attachments metadata |
+| `/api/v1/projects/<id>/tasks/` | GET/POST | Project-scoped list and create |
+| `/api/v1/projects/<id>/tasks/board/` | GET | Project-scoped Kanban board |
+
+Statuses: **todo**, **in_progress**, **done**. Priorities: **high**, **medium**, **low**.
+
+Assignees can move their tasks to **in_progress** or **done**; managers can fully manage all tasks.
+
+**Wireframes:** tasks board assignments
+
+## Phase 10 — Documents & photos (complete)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/documents/` | GET | Paginated library list + summary (`asset_type`, `document_type`, `project_id`, `folder`, `search`) |
+| `/api/v1/documents/` | POST | Upload document/photo metadata |
+| `/api/v1/documents/folders/` | GET | Folder tree with counts |
+| `/api/v1/documents/photos/` | GET | Photo timeline grouped by month |
+| `/api/v1/documents/<id>/` | GET/PATCH/DELETE | Detail / update / archive |
+| `/api/v1/documents/<id>/versions/` | GET | Version history |
+| `/api/v1/documents/<id>/versions/` | POST | Create a new version (v2, v3, ...) |
+
+Assets support: **document** and **photo**, with foldering, tags, metadata, and version history.
+
+**Wireframes:** documents photos library
+
+## Phase 11 — Notifications center (complete)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/notifications/` | GET | Paginated inbox with unread summary (`category`, `is_read`, `project_id`, `search`) |
+| `/api/v1/notifications/summary/` | GET | Unread badge counts by category |
+| `/api/v1/notifications/<id>/` | GET | Notification detail |
+| `/api/v1/notifications/<id>/read/` | POST | Mark one notification as read |
+| `/api/v1/notifications/read-all/` | POST | Mark all notifications as read |
+| `/api/v1/activity/` | GET | Company activity timeline (`?project_id=&limit=`) |
+
+Categories: **critical**, **approval**, **inventory**, **mention**, **general**.
+
+Actionable notifications are auto-synced from pending purchase approvals and low-stock inventory for eligible roles. Activity timeline aggregates diary, tasks, procurement, documents, inventory, attendance, and stored activity events.
+
+**Wireframes:** notifications center activity feed
+
+## Phase 12 — Team communication (complete)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/conversations/` | GET | List channels for current user + unread summary |
+| `/api/v1/conversations/` | POST | Create team conversation channel |
+| `/api/v1/conversations/summary/` | GET | Unread counts across channels |
+| `/api/v1/conversations/mentions/` | GET | Recent @mentions for current user |
+| `/api/v1/conversations/<id>/` | GET/PATCH | Channel detail / update announcement or archive |
+| `/api/v1/conversations/<id>/messages/` | GET/POST | Message history / send message |
+| `/api/v1/conversations/<id>/read/` | POST | Mark channel as read |
+| `/api/v1/conversations/<id>/files/` | GET | Shared files from channel messages |
+| `/api/v1/projects/<id>/conversation/` | GET/POST | Get or create project channel |
+
+Supports project channels, team conversations, attachments, @mentions (with notification), pinned announcements, and shared file aggregation.
+
+**Wireframes:** team communication collaboration
+
+## Phase 13 — Reports & analytics (complete)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/reports/templates/` | GET | Available report templates |
+| `/api/v1/reports/analytics/` | GET | Portfolio KPIs across projects, tasks, procurement, and inventory |
+| `/api/v1/projects/<id>/analytics/` | GET | Project analytics by `report_type` |
+| `/api/v1/reports/generated/` | GET | Generated report history |
+| `/api/v1/reports/generated/` | POST | Generate and save a report payload snapshot |
+| `/api/v1/reports/generated/<id>/` | GET | Generated report detail |
+
+Templates included: **progress**, **cost variance**, **attendance payroll**, **material usage**, **diary summary**, **budget vs actual**, **safety incidents**, **custom**.
+
+**Wireframes:** reports analytics hub
+
+## Phase 14 — Inspections & QA/QC (complete)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/inspections/templates/` | GET | Checklist templates by inspection type |
+| `/api/v1/inspections/dashboard/` | GET | QA dashboard KPIs (optional `project_id`) |
+| `/api/v1/inspections/` | GET/POST | Company inspection list / create |
+| `/api/v1/inspections/<id>/` | GET/PATCH/DELETE | Inspection detail / update / soft delete |
+| `/api/v1/inspections/<id>/start/` | POST | Begin inspection (draft/scheduled → in progress) |
+| `/api/v1/inspections/<id>/submit/` | POST | Submit completed checklist for review |
+| `/api/v1/inspections/<id>/review/` | POST | Pass/fail review (owner/PM) |
+| `/api/v1/projects/<id>/inspections/` | GET/POST | Project-scoped inspection list / create |
+
+Inspection types: **general**, **structural**, **electrical**, **plumbing**, **finishing**, **safety**, **MEP**, **other**.
+
+Workflow: `draft` → `scheduled` → `in_progress` → `submitted` → `passed` / `failed`.
+
+**Wireframes:** Post-MVP — Quality Assurance (sidebar nav reference; build from Tier 1/2 patterns)
+
+## Phase 15 — Expenses & receipts (complete)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/expenses/dashboard/` | GET | Expense KPIs by status, category, and amounts |
+| `/api/v1/expenses/` | GET/POST | Company expense list / create |
+| `/api/v1/expenses/<id>/` | GET/PATCH/DELETE | Expense detail / update / soft delete |
+| `/api/v1/expenses/<id>/submit/` | POST | Submit for approval (requires receipt) |
+| `/api/v1/expenses/<id>/approve/` | POST | Approve submitted expense |
+| `/api/v1/expenses/<id>/reject/` | POST | Reject with optional reason |
+| `/api/v1/expenses/<id>/reimburse/` | POST | Mark approved expense as reimbursed |
+| `/api/v1/projects/<id>/expenses/` | GET/POST | Project-scoped expense list / create |
+
+Categories: **materials**, **labour**, **transport**, **fuel**, **meals**, **equipment**, **utilities**, **subcontractor**, **other**.
+
+Payment methods: **cash**, **M-Pesa**, **bank transfer**, **card**, **other**.
+
+Workflow: `draft` → `submitted` → `approved` → `reimbursed` (or `rejected` → edit → resubmit).
+
+**Wireframes:** expenses receipt logging
+
+## Phase 16 — Client portal (complete)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/client-portal/dashboard/` | GET | Client dashboard across assigned projects |
+| `/api/v1/client-portal/projects/` | GET | Assigned projects (budget optional per grant) |
+| `/api/v1/client-portal/projects/<id>/` | GET | Read-only project progress overview |
+| `/api/v1/client-portal/projects/<id>/timeline/` | GET | Approved site diary updates |
+| `/api/v1/client-portal/projects/<id>/photos/` | GET | Shared photos from library and diary |
+| `/api/v1/client-portal/projects/<id>/milestones/` | GET | Project task milestones |
+| `/api/v1/projects/<id>/client-access/` | GET/POST | List or grant client access (PM/owner) |
+| `/api/v1/projects/<id>/client-access/<user_id>/` | DELETE | Revoke client access |
+
+Clients require the **client** company role plus an explicit per-project access grant. Budget visibility is controlled by `can_view_budget` on each grant.
+
+**Wireframes:** client portal progress view
+
+## Phase 17 — Project scheduling / Gantt (complete)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/projects/<id>/schedule/gantt/` | GET | Full Gantt payload (phases, items, dependencies, summary) |
+| `/api/v1/projects/<id>/schedule/dashboard/` | GET | Schedule KPIs (overdue, upcoming, completion) |
+| `/api/v1/projects/<id>/schedule/phases/` | GET/POST | List or create schedule phases |
+| `/api/v1/projects/<id>/schedule/items/` | POST | Create Gantt bar / milestone |
+| `/api/v1/projects/<id>/schedule/dependencies/` | POST | Link predecessor → successor |
+| `/api/v1/schedule/items/<id>/` | GET/PATCH/DELETE | Item detail / update / archive |
+| `/api/v1/schedule/items/<id>/sync-task/` | POST | Sync progress from linked task |
+| `/api/v1/schedule/dependencies/<id>/` | DELETE | Remove dependency |
+
+Item statuses: **not_started**, **in_progress**, **completed**, **delayed**, **on_hold**.
+
+Dependency types: **finish_to_start**, **start_to_start**, **finish_to_finish**, **start_to_finish**.
+
+Supports phases, milestones, assignees, optional task linking, and lag days.
+
+**Wireframes:** project scheduling gantt chart
+
+---
+
+## MVP backend status
+
+**All 17 backend phases (0–17) are complete.** See the [project README](../README.md) for the full roadmap, frontend plan, and architecture overview.

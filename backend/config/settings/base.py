@@ -46,6 +46,15 @@ INSTALLED_APPS = [
     "apps.attendance",
     "apps.procurement",
     "apps.inventory",
+    "apps.tasks",
+    "apps.documents",
+    "apps.notifications",
+    "apps.messaging",
+    "apps.reports",
+    "apps.inspections",
+    "apps.expenses",
+    "apps.client_portal",
+    "apps.scheduling",
 ]
 
 MIDDLEWARE = [
