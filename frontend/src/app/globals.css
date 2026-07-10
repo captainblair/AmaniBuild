@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap");
+@import "tailwindcss";
+@import "../styles/dashboard.css";
+
+:root {
+  /* Charcoal base (was navy) */
+  --navy: #111827;
+  --navy-deep: #0b0f19;
+  --navy-hover: #1f2937;
+  /* Safety yellow accent (token name --orange kept for compatibility) */
+  --orange: #eab308;
+  --orange-hover: #ca8a04;
+  --orange-soft: #fef9c3;
+  --orange-ink: #111827;
+  --gold: #eab308;
+  --gold-hover: #ca8a04;
+  --gold-soft: #fef9c3;
+  --slate: #334155;
+  --bg-light: #f7f5ef;
+  --white: #ffffff;
+  --text-dark: #111827;
+  --text-muted: #6b7280;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-400: #94a3b8;
+  --gray-500: #6b7280;
+  --gray-600: #475569;
+  --gray-800: #111827;
+  --green: #22c55e;
+  --green-bg: #dcfce7;
+  --amber: #eab308;
+  --amber-bg: #fef9c3;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Manrope", "Inter", sans-serif;
+  --sidebar-w: 280px;
+}
+
+@theme inline {
+  --font-sans: var(--font);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text-dark);
+  background: var(--bg-light);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--navy);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 20px 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-logo .mark {
+  width: 34px;
+  height: 34px;
+  background: var(--orange);
+  color: var(--orange-ink);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.sidebar-logo span {
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}

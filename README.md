@@ -2,13 +2,13 @@
 
 **Construction management SaaS for Kenyan builders** — multi-tenant, role-based, API-first.
 
-AmaniBuild helps contractors manage projects, sites, teams, procurement, inventory, quality, finances, and client communication from one platform. This repository contains the **frozen wireframe catalog**, the **complete MVP backend API** (Django/DRF, phases 0–17), and planning docs for the **frontend build** (not started).
+AmaniBuild helps contractors manage projects, sites, teams, procurement, inventory, quality, finances, and client communication from one platform. This repository contains the **frozen wireframe catalog**, the **complete MVP backend API** (Django/DRF, phases 0–17), and the **frontend app** (Next.js — FE Phase 0 complete).
 
 | Layer | Status | Health / version |
 |-------|--------|------------------|
 | Wireframes | Frozen (31 screens) | `wireframes/index.html` |
 | Backend API | **MVP complete** (Phases 0–17) | `GET /api/v1/health/` → `17-scheduling` |
-| Frontend | **Not started** (phases planned below) | — |
+| Frontend | **FE Phase 3 complete** (onboarding) | http://localhost:3000 |
 
 **Repository:** [github.com/captainblair/AmaniBuild](https://github.com/captainblair/AmaniBuild)
 
@@ -24,9 +24,10 @@ AmaniBuild helps contractors manage projects, sites, teams, procurement, invento
 6. [Wireframe → module mapping](#wireframe--module-mapping)
 7. [Roles & permissions](#roles--permissions)
 8. [Getting started (backend)](#getting-started-backend)
-9. [API conventions](#api-conventions)
-10. [Testing](#testing)
-11. [Post-MVP & integrations](#post-mvp--integrations)
+9. [Getting started (frontend)](#getting-started-frontend)
+10. [API conventions](#api-conventions)
+11. [Testing](#testing)
+12. [Post-MVP & integrations](#post-mvp--integrations)
 
 ---
 
@@ -40,7 +41,7 @@ AmaniBuild targets **construction companies in Kenya** (and East Africa) with:
 - **Client portal** for read-only progress sharing
 - **Reports & Gantt scheduling** for portfolio and timeline visibility
 
-The UI is defined by **31 frozen wireframes** in `wireframes/`. The backend was built **phase-by-phase** to match those modules. Frontend implementation is the next major effort.
+The UI is defined by **31 frozen wireframes** in `wireframes/`. The backend was built **phase-by-phase** to match those modules. Frontend development has started with **FE Phase 0** (tooling, API client, app shell).
 
 ---
 
@@ -48,7 +49,7 @@ The UI is defined by **31 frozen wireframes** in `wireframes/`. The backend was 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     Future frontend (React/Next)                 │
+│                     Frontend (Next.js 15)                        │
 │   Marketing │ Auth │ Onboarding │ Dashboard │ Modules │ Portal  │
 └────────────────────────────┬────────────────────────────────────┘
                              │ HTTPS / JSON
@@ -83,29 +84,35 @@ Amani Build/
 ├── wireframes/               ← Frozen UI reference (PNG + catalog)
 │   ├── index.html
 │   └── *.png
-└── backend/                  ← Django API (MVP complete)
-    ├── README.md             ← Backend quick-start & endpoint reference
-    ├── apps/
-    │   ├── core/             # Health, base models, pagination
-    │   ├── accounts/         # Phase 1 — Auth
-    │   ├── companies/        # Phases 2–3 — Tenancy, RBAC, invites
-    │   ├── projects/         # Phase 4 — Projects & sites
-    │   ├── diary/            # Phase 5 — Site diary
-    │   ├── attendance/       # Phase 6 — Attendance & QR
-    │   ├── procurement/      # Phase 7 — Purchase requests
-    │   ├── inventory/        # Phase 8 — Stock management
-    │   ├── tasks/            # Phase 9 — Task board
-    │   ├── documents/        # Phase 10 — Documents & photos
-    │   ├── notifications/    # Phase 11 — Notifications & activity
-    │   ├── messaging/        # Phase 12 — Team chat
-    │   ├── reports/          # Phase 13 — Reports & analytics
-    │   ├── inspections/      # Phase 14 — QA/QC
-    │   ├── expenses/         # Phase 15 — Expenses & receipts
-    │   ├── client_portal/    # Phase 16 — Client portal
-    │   └── scheduling/       # Phase 17 — Gantt / scheduling
-    ├── config/
-    ├── requirements/
-    └── docker-compose.yml
+├── backend/                  ← Django API (MVP complete)
+│   ├── README.md             ← Backend quick-start & endpoint reference
+│   ├── apps/
+│   │   ├── core/             # Health, base models, pagination
+│   │   ├── accounts/         # Phase 1 — Auth
+│   │   ├── companies/        # Phases 2–3 — Tenancy, RBAC, invites
+│   │   ├── projects/         # Phase 4 — Projects & sites
+│   │   ├── diary/            # Phase 5 — Site diary
+│   │   ├── attendance/       # Phase 6 — Attendance & QR
+│   │   ├── procurement/      # Phase 7 — Purchase requests
+│   │   ├── inventory/        # Phase 8 — Stock management
+│   │   ├── tasks/            # Phase 9 — Task board
+│   │   ├── documents/        # Phase 10 — Documents & photos
+│   │   ├── notifications/    # Phase 11 — Notifications & activity
+│   │   ├── messaging/        # Phase 12 — Team chat
+│   │   ├── reports/          # Phase 13 — Reports & analytics
+│   │   ├── inspections/      # Phase 14 — QA/QC
+│   │   ├── expenses/         # Phase 15 — Expenses & receipts
+│   │   ├── client_portal/    # Phase 16 — Client portal
+│   │   └── scheduling/       # Phase 17 — Gantt / scheduling
+│   ├── config/
+│   ├── requirements/
+│   └── docker-compose.yml
+└── frontend/                 ← Next.js app (FE Phase 0 complete)
+    ├── README.md             ← Frontend quick-start
+    └── src/
+        ├── app/              # Pages & layouts
+        ├── components/       # UI, layout, dev utilities
+        └── lib/              # API client, auth storage
 ```
 
 ---
@@ -420,22 +427,25 @@ Auto-sync from procurement approvals and low-stock inventory.
 
 ## Frontend roadmap — planned phases
 
-The frontend has **not been implemented**. The plan below mirrors the backend and wireframe catalog so development can proceed in sensible vertical slices. Phases are **proposed** — adjust ordering as needed when build starts.
+FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe catalog so development can proceed in sensible vertical slices.
 
-### FE Phase 0 — Platform foundation
+### FE Phase 0 — Platform foundation ✅
 
 | Goal | Deliverables |
 |------|--------------|
-| Tooling | React (or Next.js), TypeScript, ESLint, Prettier, env config |
+| Tooling | Next.js 15, TypeScript, Tailwind CSS 4, ESLint |
 | Design system | Colors, typography, spacing from `wireframes/assets/wireframe.css` |
-| API client | Axios/fetch wrapper, JWT storage, refresh flow, `X-Company-ID` |
+| API client | Fetch wrapper, JWT storage, refresh flow, `X-Company-ID` |
 | App shell | Router, layout primitives, error boundaries, loading states |
+| Dev status page | Live health check against `GET /api/v1/health/` |
+
+**Status:** Complete — see [frontend/README.md](frontend/README.md)
 
 **Backend dependency:** Phase 0–1 (health, auth)
 
 ---
 
-### FE Phase 1 — Marketing & public site
+### FE Phase 1 — Marketing & public site ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -444,11 +454,13 @@ The frontend has **not been implemented**. The plan below mirrors the backend an
 | Testimonials | `Testimonials.png` |
 | Pricing | `pricing plans.png` |
 
-**API:** `GET /api/v1/plans/` (public)
+**Status:** Complete — public homepage at `/`, dev tools at `/dev`
+
+**API:** `GET /api/v1/plans/` (public, live pricing cards)
 
 ---
 
-### FE Phase 2 — Authentication
+### FE Phase 2 — Authentication ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -457,11 +469,13 @@ The frontend has **not been implemented**. The plan below mirrors the backend an
 | OTP verification | `otp verification.png` |
 | Password reset | `Password reset flow.png` |
 
+**Status:** Complete — `/login`, `/register`, `/verify-otp`, `/forgot-password`, `/reset-password`
+
 **API:** `/api/v1/auth/*`
 
 ---
 
-### FE Phase 3 — Onboarding wizard
+### FE Phase 3 — Onboarding wizard ✅
 
 | Steps | Wireframe |
 |-------|-----------|
@@ -469,6 +483,10 @@ The frontend has **not been implemented**. The plan below mirrors the backend an
 | First site | (same wizard) |
 | Invite team | `onboarding invite team roles.png` |
 | Complete | Progress from `/api/v1/onboarding/status/` |
+
+**Status:** Complete — `/onboarding` wizard (company → site → invite → review)
+
+**API:** `/api/v1/onboarding/*`, `/api/v1/company/invitations/`, `/api/v1/company/roles/`
 
 ---
 
@@ -721,6 +739,22 @@ See [backend/README.md](backend/README.md) for detailed backend documentation.
 
 ---
 
+## Getting started (frontend)
+
+```bash
+cd frontend
+cp .env.local.example .env.local
+npm install
+npm run dev
+```
+
+- **App:** http://localhost:3000 (marketing homepage)
+- **Dev status:** http://localhost:3000/dev (API health check when backend is running)
+
+See [frontend/README.md](frontend/README.md) for frontend structure and scripts.
+
+---
+
 ## API conventions
 
 **Authentication**
@@ -785,6 +819,6 @@ Not in MVP backend phases but noted in wireframe catalog:
 
 ## License & contribution
 
-Private project. Backend MVP is complete through Phase 17. Frontend build awaits explicit go-ahead per wireframe freeze policy.
+Private project. Backend MVP is complete through Phase 17. Frontend FE Phase 3 (onboarding) is complete; proceed with FE Phase 4 (dashboard shell) when ready.
 
 For backend-only details and endpoint tables, see **[backend/README.md](backend/README.md)**.

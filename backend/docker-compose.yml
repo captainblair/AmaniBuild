@@ -70,6 +70,11 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    environment:
+      # Inside Docker, use service names — not localhost (that points at the api container itself).
+      DATABASE_URL: postgis://amanibuild:amanibuild@db:5432/amanibuild
+      REDIS_URL: redis://redis:6379/0
+      AWS_S3_ENDPOINT_URL: http://minio:9000
     depends_on:
       db:
         condition: service_healthy
