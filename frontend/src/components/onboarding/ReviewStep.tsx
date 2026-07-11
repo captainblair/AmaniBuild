@@ -46,7 +46,9 @@ export function ReviewStep({ company, site, invitations, onBack, onDone }: Revie
         <p className="mt-2 text-lg font-bold text-[var(--navy)]">{company.name}</p>
         <p className="text-sm text-[var(--gray-500)]">
           {[company.city, company.county].filter(Boolean).join(", ") || "Kenya"} · Plan:{" "}
-          {company.plan}
+          {typeof company.plan === "object" && company.plan
+            ? company.plan.name
+            : company.plan || "Free"}
         </p>
       </section>
 

@@ -150,7 +150,7 @@ export type Company = {
   city: string | null;
   county: string | null;
   country: string;
-  plan: string;
+  plan: SubscriptionPlan | string | null;
   onboarding_step: string;
   onboarding_completed_at: string | null;
   is_onboarding_complete: boolean;

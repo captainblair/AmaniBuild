@@ -59,7 +59,13 @@ export function SiteStep({ companyName, onDone, onBack }: SiteStepProps) {
       });
       onDone(result.site);
     } catch (err) {
-      setError(err instanceof ApiClientError ? err.message : "Could not create site.");
+      if (err instanceof ApiClientError) {
+        setError(err.message);
+      } else if (err instanceof TypeError) {
+        setError("Could not reach the API. Check that the backend is running and try again.");
+      } else {
+        setError(err instanceof Error ? err.message : "Could not create site.");
+      }
     } finally {
       setLoading(false);
     }
