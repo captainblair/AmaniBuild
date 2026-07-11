@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { BackToTop } from "@/components/marketing/BackToTop";
 import { PromoBanner } from "@/components/marketing/PromoBanner";
 import { PublicFooter } from "@/components/marketing/PublicFooter";
 import { PublicNav } from "@/components/marketing/PublicNav";
@@ -12,6 +13,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       <PublicNav />
       <main>{children}</main>
       <PublicFooter />
+      <BackToTop />
     </div>
   );
 }
