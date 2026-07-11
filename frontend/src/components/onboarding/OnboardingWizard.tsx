@@ -113,11 +113,11 @@ export function OnboardingWizard() {
   if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[var(--bg-light)] px-6">
-        <div className="max-w-md rounded-2xl border border-[var(--gray-200)] bg-white p-8 text-center">
+        <div className="max-w-md border-2 border-[var(--navy)] bg-white p-8 text-center shadow-[8px_8px_0_var(--orange)]">
           <p className="text-sm text-[var(--red)]">{error}</p>
           <button
             type="button"
-            className="mt-4 text-sm font-medium text-[var(--orange)]"
+            className="mt-4 text-sm font-bold uppercase tracking-wide text-[var(--navy)]"
             onClick={() => window.location.reload()}
           >
             Retry
@@ -129,39 +129,41 @@ export function OnboardingWizard() {
 
   const sidePanel =
     step === "company" ? (
-      <div>
-        <h2 className="text-sm font-bold text-[var(--navy)]">Why we ask</h2>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--gray-500)]">
-          Company details power your workspace branding, billing plan, and team permissions across
-          every site.
+      <div className="ob-aside-card">
+        <p className="ob-aside-card__eyebrow">Why we ask</p>
+        <h2 className="ob-aside-card__title">Company details unlock your workspace</h2>
+        <p className="ob-aside-card__text">
+          These details power branding, billing plan, and team permissions across every site.
         </p>
+        <ul className="ob-aside-card__list">
+          <li>Workspace name and branding</li>
+          <li>Plan limits for projects and users</li>
+          <li>Role-based access for your team</li>
+        </ul>
       </div>
     ) : step === "site" ? (
-      <div>
-        <h2 className="text-sm font-bold text-[var(--navy)]">Site preview</h2>
-        <div className="mt-4 rounded-xl border border-[var(--gray-200)] bg-[var(--gray-50)] p-4">
-          <p className="text-xs font-bold uppercase text-[var(--green)]">Planning</p>
-          <p className="mt-2 font-semibold text-[var(--navy)]">
-            {site?.name ?? "Your first site"}
-          </p>
-          <p className="mt-1 text-xs text-[var(--gray-500)]">
-            You can customize modules and settings after setup.
-          </p>
-        </div>
+      <div className="ob-aside-card">
+        <p className="ob-aside-card__eyebrow">Site preview</p>
+        <h2 className="ob-aside-card__title">{site?.name ?? "Your first site"}</h2>
+        <p className="ob-aside-card__text">
+          Start in planning mode. You can customize modules and settings after setup.
+        </p>
       </div>
     ) : step === "invite" ? (
-      <div>
-        <h2 className="text-sm font-bold text-[var(--navy)]">What each role can access</h2>
-        <p className="mt-2 text-sm text-[var(--gray-500)]">
+      <div className="ob-aside-card">
+        <p className="ob-aside-card__eyebrow">Roles</p>
+        <h2 className="ob-aside-card__title">What each role can access</h2>
+        <p className="ob-aside-card__text">
           Roles control diary, attendance, procurement, and finance permissions. Owners keep full
           control.
         </p>
       </div>
     ) : (
-      <div>
-        <h2 className="text-sm font-bold text-[var(--navy)]">Almost there</h2>
-        <p className="mt-2 text-sm text-[var(--gray-500)]">
-          Launching your workspace unlocks the dashboard, projects, and site tools.
+      <div className="ob-aside-card">
+        <p className="ob-aside-card__eyebrow">Almost there</p>
+        <h2 className="ob-aside-card__title">Ready to launch</h2>
+        <p className="ob-aside-card__text">
+          Completing setup unlocks your dashboard, projects, and site tools.
         </p>
       </div>
     );

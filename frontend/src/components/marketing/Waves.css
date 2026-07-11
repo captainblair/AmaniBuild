@@ -1,0 +1,57 @@
+.waves {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.waves::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #eab308;
+  border-radius: 50%;
+  transform: translate3d(calc(var(--x, 0px) - 50%), calc(var(--y, 0px) - 50%), 0);
+  will-change: transform;
+  pointer-events: none;
+  opacity: 0.85;
+  z-index: 2;
+}
+
+.waves-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mkt-waves {
+  position: relative;
+  height: clamp(160px, 22vw, 240px);
+  overflow: hidden;
+  background: var(--navy-deep);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: crosshair;
+}
+
+.mkt-waves__fade {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(11, 15, 25, 0.55) 0%, transparent 35%, transparent 65%, rgba(11, 15, 25, 0.75) 100%),
+    linear-gradient(90deg, rgba(11, 15, 25, 0.35), transparent 20%, transparent 80%, rgba(11, 15, 25, 0.35));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mkt-waves {
+    display: none;
+  }
+}

@@ -66,96 +66,94 @@ export function SiteStep({ companyName, onDone, onBack }: SiteStepProps) {
   }
 
   return (
-    <form className="mx-auto max-w-xl space-y-4" onSubmit={onSubmit}>
-      <div>
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--orange)]">
-          Step 2 of 4
-        </p>
-        <h1
-          className="mt-2 text-3xl font-extrabold tracking-[-0.03em] text-[var(--navy)]"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Add your first site
-        </h1>
-        <p className="mt-2 text-sm text-[var(--gray-500)]">
+    <form className="ob-form" onSubmit={onSubmit}>
+      <header className="ob-form__header">
+        <p className="ob-form__step">Step 2 of 4</p>
+        <h1 className="ob-form__title">Add your first site</h1>
+        <p className="ob-form__lede">
           Create the primary project site for <strong>{companyName}</strong>. You can add more sites
           later.
         </p>
-      </div>
+      </header>
 
-      <TextInput
-        label="Site / project name"
-        name="name"
-        required
-        placeholder="Riverside Heights Apartments"
-        value={form.name}
-        onChange={update("name")}
-      />
-
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--navy)]">Site type</label>
-        <select
-          className="w-full rounded-[var(--radius)] border border-[var(--gray-200)] bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[var(--orange)]/20"
-          value={form.site_type}
-          onChange={update("site_type")}
-        >
-          {SITE_TYPES.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <TextInput
-        label="Site location / address"
-        name="address_line"
-        placeholder="Syokimau, Mombasa Road"
-        value={form.address_line}
-        onChange={update("address_line")}
-      />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <TextInput label="City" name="city" value={form.city} onChange={update("city")} />
-        <TextInput label="County" name="county" value={form.county} onChange={update("county")} />
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="ob-form__grid">
         <TextInput
-          label="Start date"
-          type="date"
-          name="expected_start_date"
-          value={form.expected_start_date}
-          onChange={update("expected_start_date")}
-        />
-        <TextInput
-          label="Expected completion"
-          type="date"
-          name="expected_end_date"
-          value={form.expected_end_date}
-          onChange={update("expected_end_date")}
+          label="Site / project name"
+          name="name"
+          required
+          placeholder="Riverside Heights Apartments"
+          value={form.name}
+          onChange={update("name")}
         />
       </div>
 
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-[var(--navy)]">Description</label>
-        <textarea
-          className="min-h-[96px] w-full rounded-[var(--radius)] border border-[var(--gray-200)] bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[var(--orange)]/20"
-          value={form.description}
-          onChange={update("description")}
-          placeholder="Brief notes about this site…"
-        />
+      <div className="ob-form__section">
+        <p className="ob-form__section-title">Site details</p>
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-[var(--navy)]">Site type</label>
+          <select
+            className="w-full rounded-[var(--radius)] border border-[var(--gray-200)] bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[var(--orange)]/20"
+            value={form.site_type}
+            onChange={update("site_type")}
+          >
+            {SITE_TYPES.map((type) => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mt-4">
+          <TextInput
+            label="Site location / address"
+            name="address_line"
+            placeholder="Syokimau, Mombasa Road"
+            value={form.address_line}
+            onChange={update("address_line")}
+          />
+        </div>
+        <div className="ob-form__grid ob-form__grid--2 mt-4">
+          <TextInput label="City" name="city" value={form.city} onChange={update("city")} />
+          <TextInput label="County" name="county" value={form.county} onChange={update("county")} />
+        </div>
+        <div className="ob-form__grid ob-form__grid--2 mt-4">
+          <TextInput
+            label="Start date"
+            type="date"
+            name="expected_start_date"
+            value={form.expected_start_date}
+            onChange={update("expected_start_date")}
+          />
+          <TextInput
+            label="Expected completion"
+            type="date"
+            name="expected_end_date"
+            value={form.expected_end_date}
+            onChange={update("expected_end_date")}
+          />
+        </div>
+        <div className="mt-4">
+          <label className="mb-1.5 block text-sm font-medium text-[var(--navy)]">Description</label>
+          <textarea
+            className="min-h-[96px] w-full rounded-[var(--radius)] border border-[var(--gray-200)] bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[var(--orange)] focus:ring-2 focus:ring-[var(--orange)]/20"
+            value={form.description}
+            onChange={update("description")}
+            placeholder="Brief notes about this site…"
+          />
+        </div>
       </div>
 
       {error ? (
-        <p className="rounded-lg bg-[var(--red-bg)] px-3 py-2 text-sm text-[var(--red)]">{error}</p>
+        <p className="mt-4 rounded-lg bg-[var(--red-bg)] px-3 py-2 text-sm text-[var(--red)]">{error}</p>
       ) : null}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="ob-actions">
         {onBack ? (
           <Button type="button" variant="outline" onClick={onBack}>
             Back
           </Button>
         ) : null}
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading} className="min-w-[160px]">
           {loading ? "Saving…" : "Continue"}
         </Button>
       </div>

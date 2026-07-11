@@ -32,21 +32,14 @@ export function ReviewStep({ company, site, invitations, onBack, onDone }: Revie
   }
 
   return (
-    <div className="mx-auto max-w-xl space-y-5">
-      <div>
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--orange)]">
-          Step 4 of 4
-        </p>
-        <h1
-          className="mt-2 text-3xl font-extrabold tracking-[-0.03em] text-[var(--navy)]"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Review & finish
-        </h1>
-        <p className="mt-2 text-sm text-[var(--gray-500)]">
+    <div className="ob-form space-y-5">
+      <header className="ob-form__header">
+        <p className="ob-form__step">Step 4 of 4</p>
+        <h1 className="ob-form__title">Review & finish</h1>
+        <p className="ob-form__lede">
           Confirm your workspace details, then launch your AmaniBuild dashboard.
         </p>
-      </div>
+      </header>
 
       <section className="rounded-2xl border border-[var(--gray-200)] bg-white p-5 shadow-sm">
         <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--gray-400)]">Company</h2>

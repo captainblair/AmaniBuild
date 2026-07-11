@@ -715,6 +715,91 @@
   color: var(--gray-500);
 }
 
+/* ── Marketing content pages ── */
+.mkt-page {
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.mkt-page__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 72px 32px 88px;
+}
+
+.mkt-page__eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange-hover);
+}
+
+.mkt-page__title {
+  margin: 12px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  color: var(--navy);
+}
+
+.mkt-page__lede {
+  margin: 16px 0 0;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--gray-600);
+}
+
+.mkt-page__body {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 2px solid var(--navy);
+}
+
+.mkt-page__body h2 {
+  margin: 28px 0 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.mkt-page__body p {
+  margin: 12px 0 0;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--gray-600);
+}
+
+.mkt-page__body a {
+  color: var(--navy);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.mkt-page__body a:hover {
+  color: var(--orange-hover);
+}
+
+.mkt-page__back {
+  margin: 40px 0 0;
+}
+
+.mkt-page__back a {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.mkt-page__back a:hover {
+  color: var(--orange-hover);
+}
+
 /* ── Footer ── */
 .wf-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -725,15 +810,15 @@
 .wf-footer__inner {
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 48px;
   justify-content: space-between;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 56px 32px;
+  padding: 64px 32px 48px;
 }
 
 .wf-footer__about {
-  max-width: 320px;
+  max-width: 340px;
 }
 
 .wf-footer__about p {
@@ -743,6 +828,26 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+.wf-footer__contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.wf-footer__contact a {
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.wf-footer__contact a:hover {
+  color: #fff;
+}
+
 .wf-footer__cols {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -750,9 +855,12 @@
 }
 
 .wf-footer__col h4 {
-  margin: 0 0 12px;
-  font-size: 0.88rem;
-  font-weight: 600;
+  margin: 0 0 14px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
 }
 
 .wf-footer__col ul {
@@ -762,26 +870,51 @@
 }
 
 .wf-footer__col li + li {
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
-.wf-footer__col a,
-.wf-footer__col span {
-  font-size: 0.84rem;
+.wf-footer__col a {
+  font-size: 0.88rem;
   color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 .wf-footer__col a:hover {
-  color: #fff;
+  color: var(--orange);
 }
 
 .wf-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  max-width: 1280px;
+  margin: 0 auto;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 16px 32px;
-  text-align: center;
+  padding: 18px 32px 28px;
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.4);
+}
+
+.wf-footer__bottom p {
+  margin: 0;
+}
+
+.wf-footer__bottom-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.wf-footer__bottom-links a {
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+}
+
+.wf-footer__bottom-links a:hover {
+  color: #fff;
 }
 
 @media (max-width: 900px) {
@@ -817,6 +950,11 @@
   .wf-footer__cols {
     grid-template-columns: 1fr 1fr;
   }
+
+  .wf-footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 640px) {
@@ -832,7 +970,21 @@
     grid-template-columns: 1fr;
   }
 
+  .wf-footer__inner {
+    padding: 48px 20px 36px;
+  }
+
   .wf-footer__cols {
     grid-template-columns: 1fr;
+    gap: 28px;
+    width: 100%;
+  }
+
+  .wf-footer__bottom {
+    padding: 16px 20px 24px;
+  }
+
+  .mkt-page__inner {
+    padding: 48px 20px 64px;
   }
 }

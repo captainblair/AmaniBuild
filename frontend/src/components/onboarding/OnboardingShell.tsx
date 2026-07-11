@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Logo } from "@/components/ui/Logo";
 
 export const ONBOARDING_STEPS = [
@@ -19,67 +20,105 @@ export function OnboardingShell({ activeStep, children, sidePanel }: OnboardingS
   const activeIndex = ONBOARDING_STEPS.findIndex((step) => step.key === activeStep);
 
   return (
-    <div className="flex min-h-screen bg-[var(--bg-light)]">
-      <aside className="hidden w-[280px] shrink-0 flex-col bg-[var(--navy)] px-6 py-8 text-white lg:flex">
-        <Logo variant="light" size="lg" />
-        <nav className="mt-10 flex-1 space-y-2">
-          {ONBOARDING_STEPS.map((step, index) => {
-            const done = index < activeIndex;
-            const active = index === activeIndex;
-            return (
-              <div
-                key={step.key}
-                className={`flex gap-3 rounded-xl px-3 py-3 ${
-                  active ? "bg-white/10" : ""
-                }`}
-              >
-                <span
-                  className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                    done
-                      ? "bg-[var(--green)] text-white"
-                      : active
-                        ? "bg-[var(--orange)] text-[var(--orange-ink)]"
-                        : "bg-white/10 text-white/50"
-                  }`}
+    <div className="ob-shell">
+      <aside className="ob-rail">
+        <div className="ob-rail__visual" aria-hidden>
+          <Image
+            src="/marketing/home2.avif"
+            alt=""
+            fill
+            className="ob-rail__photo"
+            sizes="340px"
+            priority
+          />
+          <div className="ob-rail__scrim" />
+          <div className="ob-rail__stripes" />
+          <div className="ob-rail__block ob-rail__block--yellow" />
+          <div className="ob-rail__block ob-rail__block--red" />
+        </div>
+
+        <div className="ob-rail__content">
+          <Logo variant="light" size="lg" href="/" />
+
+          <div className="ob-rail__intro">
+            <p className="ob-rail__eyebrow">
+              <span className="ob-rail__mark" aria-hidden />
+              Setup
+            </p>
+            <h2 className="ob-rail__headline">
+              Build the
+              <br />
+              foundation
+            </h2>
+            <p className="ob-rail__copy">
+              Four steps. One workspace. Ready for Kenyan construction teams.
+            </p>
+          </div>
+
+          <nav className="ob-steps" aria-label="Onboarding progress">
+            {ONBOARDING_STEPS.map((step, index) => {
+              const done = index < activeIndex;
+              const active = index === activeIndex;
+              return (
+                <div
+                  key={step.key}
+                  className={`ob-step${active ? " is-active" : ""}${done ? " is-done" : ""}`}
                 >
-                  {done ? "✓" : index + 1}
-                </span>
-                <div>
-                  <p className={`text-sm font-semibold ${active ? "text-white" : "text-white/70"}`}>
-                    {step.label}
-                  </p>
-                  <p className="text-xs text-white/45">{step.hint}</p>
+                  <div className="ob-step__track" aria-hidden>
+                    <span className="ob-step__dot">
+                      {done ? "✓" : String(index + 1).padStart(2, "0")}
+                    </span>
+                    {index < ONBOARDING_STEPS.length - 1 ? (
+                      <span className="ob-step__line" />
+                    ) : null}
+                  </div>
+                  <div className="ob-step__copy">
+                    <p className="ob-step__label">{step.label}</p>
+                    <p className="ob-step__hint">{step.hint}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </nav>
-        <p className="text-xs text-white/40">Your data is secure and encrypted</p>
+              );
+            })}
+          </nav>
+
+          <div className="ob-rail__footer">
+            <span className="ob-rail__hazard" aria-hidden />
+            <p className="ob-rail__secure">Secure · Encrypted · Kenya-ready</p>
+          </div>
+        </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-b border-[var(--gray-200)] bg-white px-4 py-4 lg:hidden">
-          <Logo size="lg" />
-          <div className="mt-4 flex gap-2">
+      <div className="ob-main">
+        <div className="ob-main__graphic" aria-hidden>
+          <span className="ob-main__slash" />
+          <span className="ob-main__dot" />
+          <span className="ob-main__rule" />
+        </div>
+
+        <header className="ob-mobile-bar">
+          <Logo variant="dark" size="md" href="/" />
+          <div className="ob-mobile-progress" aria-hidden>
             {ONBOARDING_STEPS.map((step, index) => (
-              <div
+              <span
                 key={step.key}
-                className={`h-1.5 flex-1 rounded-full ${
-                  index <= activeIndex ? "bg-[var(--orange)]" : "bg-[var(--gray-200)]"
-                }`}
+                className={`ob-mobile-progress__seg${index <= activeIndex ? " is-on" : ""}${index === activeIndex ? " is-now" : ""}`}
               />
             ))}
           </div>
         </header>
 
-        <main className="flex flex-1 flex-col lg:flex-row">
-          <div className="flex-1 px-4 py-8 sm:px-8 lg:px-12 lg:py-10">{children}</div>
-          {sidePanel ? (
-            <aside className="hidden w-[340px] shrink-0 border-l border-[var(--gray-200)] bg-white p-6 xl:block">
-              {sidePanel}
-            </aside>
-          ) : null}
-        </main>
+        <div className="ob-main__body">
+          <div className="ob-main__form">
+            <div className="ob-form-panel">
+              <p className="ob-form-panel__stamp" aria-hidden>
+                {String(activeIndex + 1).padStart(2, "0")}
+                <span>/04</span>
+              </p>
+              {children}
+            </div>
+          </div>
+          {sidePanel ? <aside className="ob-aside">{sidePanel}</aside> : null}
+        </div>
       </div>
     </div>
   );

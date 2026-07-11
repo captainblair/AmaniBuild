@@ -44,7 +44,7 @@ export function InviteStep({
       [
         { value: "foreman", tag: "Field Access", color: "text-[var(--orange)] bg-[var(--orange-soft)]" },
         { value: "site_engineer", tag: "Field Access", color: "text-blue-700 bg-blue-50" },
-        { value: "project_manager", tag: "Full Access", color: "text-purple-700 bg-purple-50" },
+        { value: "project_manager", tag: "Full Access", color: "text-[var(--navy)] bg-[var(--gray-100)]" },
         { value: "accountant", tag: "Finance Access", color: "text-green-700 bg-green-50" },
       ].filter((item) => roles.some((role) => role.value === item.value)),
     [roles],
@@ -95,21 +95,14 @@ export function InviteStep({
   }
 
   return (
-    <form className="mx-auto max-w-2xl space-y-5" onSubmit={onSubmit}>
-      <div>
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--orange)]">
-          Step 3 of 4
-        </p>
-        <h1
-          className="mt-2 text-3xl font-extrabold tracking-[-0.03em] text-[var(--navy)]"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Invite your team
-        </h1>
-        <p className="mt-2 text-sm text-[var(--gray-500)]">
+    <form className="ob-form space-y-5" onSubmit={onSubmit}>
+      <header className="ob-form__header">
+        <p className="ob-form__step">Step 3 of 4</p>
+        <h1 className="ob-form__title">Invite your team</h1>
+        <p className="ob-form__lede">
           Add colleagues by email and assign roles. You can skip this and invite people later.
         </p>
-      </div>
+      </header>
 
       <div className="space-y-3">
         {rows.map((row, index) => (
