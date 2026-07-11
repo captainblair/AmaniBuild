@@ -20,13 +20,16 @@ export function PortfolioDashboard({ analytics, projects, firstName, companyName
   return (
     <div className="space-y-6">
       <div>
+        <p className="text-sm font-semibold text-[var(--orange-hover)]">
+          {variant === "owner" ? "Owner portfolio" : "Delivery snapshot"}
+        </p>
         <h1
-          className="text-2xl font-extrabold text-[var(--navy)] md:text-[1.75rem]"
+          className="mt-1.5 text-[1.75rem] font-bold tracking-[-0.02em] text-[var(--navy)] md:text-[2rem]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           {variant === "owner" ? `Good day, ${firstName}` : `Welcome back, ${firstName}`}
         </h1>
-        <p className="mt-1 text-sm text-[var(--gray-500)]">
+        <p className="mt-2 max-w-xl text-[0.95rem] leading-relaxed text-[var(--gray-600)]">
           {variant === "owner"
             ? `Portfolio overview for ${companyName}.`
             : `Project delivery snapshot for ${companyName}.`}
@@ -77,18 +80,26 @@ export function PortfolioDashboard({ analytics, projects, firstName, companyName
       <div className="grid gap-4 xl:grid-cols-[1.4fr_0.8fr]">
         <ProjectTable projects={projects.slice(0, 6)} />
         <aside className="space-y-4">
-          <section className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-4 shadow-sm">
-            <h2 className="text-sm font-semibold text-[var(--navy)]">Quick actions</h2>
+          <section className="dash-panel p-4">
+            <h2 className="dash-panel__title">Quick actions</h2>
             <div className="mt-3 grid gap-2">
-              <QuickLink href="/dashboard/projects" label="Open projects" />
-              <QuickLink href="/dashboard/diary" label="Site diary" />
-              <QuickLink href="/dashboard/reports" label="Reports hub" />
-              <QuickLink href="/dashboard/procurement" label="Procurement" />
+              <Link href="/dashboard/projects" className="dash-quick-link">
+                Open projects
+              </Link>
+              <Link href="/dashboard/diary" className="dash-quick-link">
+                Site diary
+              </Link>
+              <Link href="/dashboard/reports" className="dash-quick-link">
+                Reports hub
+              </Link>
+              <Link href="/dashboard/procurement" className="dash-quick-link">
+                Procurement
+              </Link>
             </div>
           </section>
-          <section className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-4 shadow-sm">
-            <h2 className="text-sm font-semibold text-[var(--navy)]">Attention</h2>
-            <ul className="mt-3 space-y-2 text-sm text-[var(--gray-600)]">
+          <section className="dash-panel p-4">
+            <h2 className="dash-panel__title">Attention</h2>
+            <ul className="dash-attention mt-3 space-y-2.5 text-sm text-[var(--gray-600)]">
               <li>
                 {analytics?.pending_purchase_approvals ?? 0} purchase requests awaiting approval
               </li>
@@ -106,16 +117,5 @@ function avgProgress(projects: ProjectListItem[]) {
   if (!projects.length) return 0;
   return Math.round(
     projects.reduce((sum, p) => sum + p.progress_percent, 0) / projects.length,
-  );
-}
-
-function QuickLink({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      className="rounded-lg border border-[var(--gray-200)] px-3 py-2.5 text-sm font-medium text-[var(--navy)] transition hover:border-[var(--orange)] hover:bg-[var(--orange-soft)]"
-    >
-      {label}
-    </Link>
   );
 }

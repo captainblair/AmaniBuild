@@ -15,15 +15,12 @@ type ProjectTableProps = {
 export function ProjectTable({ projects }: ProjectTableProps) {
   if (projects.length === 0) {
     return (
-      <div className="rounded-[var(--radius-lg)] border border-dashed border-[var(--gray-200)] bg-white p-8 text-center">
-        <p className="font-semibold text-[var(--navy)]">No projects yet</p>
-        <p className="mt-1 text-sm text-[var(--gray-500)]">
+      <div className="dash-empty">
+        <p className="dash-empty__title">No projects yet</p>
+        <p className="dash-empty__text">
           Create your first project to see portfolio progress here.
         </p>
-        <Link
-          href="/dashboard/projects"
-          className="mt-4 inline-flex text-sm font-semibold text-[var(--orange-hover)] hover:underline"
-        >
+        <Link href="/dashboard/projects" className="dash-empty__link">
           Go to projects
         </Link>
       </div>
@@ -31,10 +28,10 @@ export function ProjectTable({ projects }: ProjectTableProps) {
   }
 
   return (
-    <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white shadow-sm">
-      <div className="flex items-center justify-between border-b border-[var(--gray-200)] px-4 py-3">
-        <h2 className="text-sm font-semibold text-[var(--navy)]">Projects</h2>
-        <Link href="/dashboard/projects" className="text-xs font-semibold text-[var(--orange-hover)] hover:underline">
+    <div className="dash-panel overflow-hidden">
+      <div className="flex items-center justify-between border-b-2 border-[var(--navy)] px-4 py-3">
+        <h2 className="dash-panel__title">Projects</h2>
+        <Link href="/dashboard/projects" className="text-xs font-bold text-[var(--orange-hover)] hover:underline">
           View all
         </Link>
       </div>

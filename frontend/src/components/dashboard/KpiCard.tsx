@@ -1,31 +1,28 @@
 import type { ReactNode } from "react";
 
+type KpiTone = "default" | "warn" | "danger" | "success";
+
 type KpiCardProps = {
   label: string;
   value: string | number;
   hint?: string;
-  tone?: "default" | "warn" | "danger" | "success";
+  tone?: KpiTone;
   children?: ReactNode;
 };
 
-const hintTone: Record<NonNullable<KpiCardProps["tone"]>, string> = {
-  default: "text-[var(--gray-500)]",
-  warn: "text-[var(--amber)]",
-  danger: "text-[var(--red)]",
-  success: "text-[var(--green)]",
+const toneClass: Record<KpiTone, string> = {
+  default: "",
+  warn: " dash-kpi--warn",
+  danger: " dash-kpi--danger",
+  success: " dash-kpi--success",
 };
 
 export function KpiCard({ label, value, hint, tone = "default", children }: KpiCardProps) {
   return (
-    <article className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-4 shadow-sm">
-      <p className="text-xs font-medium uppercase tracking-wide text-[var(--gray-500)]">{label}</p>
-      <p
-        className="mt-2 text-2xl font-extrabold tracking-tight text-[var(--navy)]"
-        style={{ fontFamily: "var(--font-display)" }}
-      >
-        {value}
-      </p>
-      {hint ? <p className={`mt-1 text-xs ${hintTone[tone]}`}>{hint}</p> : null}
+    <article className={`dash-kpi${toneClass[tone]}`}>
+      <p className="dash-kpi__label">{label}</p>
+      <p className="dash-kpi__value">{value}</p>
+      {hint ? <p className="dash-kpi__hint">{hint}</p> : null}
       {children}
     </article>
   );

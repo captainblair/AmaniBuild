@@ -56,7 +56,7 @@ export function TopBar({ onToggleSidebar, onOpenMobile, title, subtitle }: TopBa
               <input
                 type="search"
                 placeholder="Search projects, tasks, people…"
-                className="w-full rounded-lg border border-[var(--gray-200)] bg-[var(--gray-50)] py-2 pl-9 pr-3 text-sm outline-none focus:border-[var(--orange)] focus:bg-white"
+                className="dash-topbar__search"
               />
             </div>
           )}
@@ -90,9 +90,7 @@ export function TopBar({ onToggleSidebar, onOpenMobile, title, subtitle }: TopBa
             <p className="text-xs font-semibold text-[var(--navy)]">{user.full_name}</p>
             <p className="text-[10px] text-[var(--gray-500)]">{roleLabel(membership.role)}</p>
           </div>
-          <div className="grid h-9 w-9 place-items-center rounded-full bg-[var(--navy)] text-xs font-bold text-white">
-            {initials}
-          </div>
+          <div className="dash-topbar__avatar">{initials}</div>
         </div>
       </div>
     </header>
