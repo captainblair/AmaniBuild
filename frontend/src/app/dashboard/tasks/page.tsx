@@ -1,12 +1,20 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { Suspense } from "react";
+import { TasksPage } from "@/components/tasks/TasksPage";
+import { Spinner } from "@/components/ui/Spinner";
+import "@/styles/tasks.css";
 
 export const metadata = { title: "Tasks" };
 
-export default function TasksPlaceholderPage() {
+export default function TasksRoutePage() {
   return (
-    <ModulePlaceholder
-      title="Tasks"
-      description="Task boards and assignments land in a later phase."
-    />
+    <Suspense
+      fallback={
+        <div className="flex justify-center py-16">
+          <Spinner label="Loading tasks…" />
+        </div>
+      }
+    >
+      <TasksPage />
+    </Suspense>
   );
 }

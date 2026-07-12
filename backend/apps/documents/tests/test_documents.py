@@ -213,3 +213,29 @@ def test_worker_can_view_not_upload(worker_client, owner_client):
     )
     assert create.status_code == 403
 
+
+@pytest.mark.django_db
+def test_file_upload_endpoint(owner_client, settings, tmp_path):
+    settings.MEDIA_ROOT = tmp_path
+    settings.MEDIA_URL = "/media/"
+
+    from django.core.files.uploadedfile import SimpleUploadedFile
+
+    uploaded = SimpleUploadedFile(
+        "site_plan.pdf",
+        b"%PDF-1.4 test content",
+        content_type="application/pdf",
+    )
+    response = owner_client.post(
+        reverse("library-upload"),
+        {"file": uploaded},
+        format="multipart",
+    )
+    assert response.status_code == 201
+    payload = response.data["data"]
+    assert payload["file_extension"] == "pdf"
+    assert payload["mime_type"] == "application/pdf"
+    assert payload["size_bytes"] > 0
+    assert payload["file_url"]
+    assert "site_plan.pdf" in payload["original_name"]
+

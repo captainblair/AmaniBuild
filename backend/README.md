@@ -268,6 +268,7 @@ Assignees can move their tasks to **in_progress** or **done**; managers can full
 |----------|--------|-------------|
 | `/api/v1/documents/` | GET | Paginated library list + summary (`asset_type`, `document_type`, `project_id`, `folder`, `search`) |
 | `/api/v1/documents/` | POST | Upload document/photo metadata |
+| `/api/v1/documents/upload/` | POST | Multipart file upload to local MEDIA or MinIO/S3 |
 | `/api/v1/documents/folders/` | GET | Folder tree with counts |
 | `/api/v1/documents/photos/` | GET | Photo timeline grouped by month |
 | `/api/v1/documents/<id>/` | GET/PATCH/DELETE | Detail / update / archive |

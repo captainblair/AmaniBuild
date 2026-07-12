@@ -50,7 +50,7 @@ function NavList({
                     <Icon className="h-[18px] w-[18px] shrink-0" />
                     {!collapsed ? <span className="truncate">{item.label}</span> : null}
                     {!collapsed && item.badge ? (
-                      <span className="ml-auto bg-[var(--orange)] px-1.5 py-0.5 text-[10px] font-bold text-[var(--orange-ink)]">
+                      <span className="ml-auto rounded-full bg-[var(--orange)]/90 px-2 py-0.5 text-[10px] font-semibold text-[var(--orange-ink)]">
                         {item.badge}
                       </span>
                     ) : null}
@@ -107,7 +107,7 @@ export function Sidebar({ collapsed, mobileOpen, onCloseMobile }: SidebarProps) 
             </label>
             <select
               id="company-switcher"
-              className="w-full border border-white/10 bg-white/5 px-2.5 py-2 text-xs text-white outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-2.5 py-2 text-xs text-white outline-none"
               value={membership.company_id}
               onChange={(e) => switchCompany(e.target.value)}
             >

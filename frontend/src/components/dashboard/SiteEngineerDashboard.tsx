@@ -22,7 +22,7 @@ export function SiteEngineerDashboard({ firstName, companyName, projects }: Prop
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1
-            className="text-2xl font-extrabold text-[var(--navy)]"
+            className="text-2xl font-semibold tracking-[-0.02em] text-[var(--navy)]"
             style={{ fontFamily: "var(--font-display)" }}
           >
             Daily overview, {firstName}
@@ -34,9 +34,11 @@ export function SiteEngineerDashboard({ firstName, companyName, projects }: Prop
           </p>
         </div>
         {primary ? (
-          <div className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white px-4 py-3 text-right shadow-sm">
+          <div className="dash-panel px-4 py-3 text-right">
             <p className="text-xs text-[var(--gray-500)]">Project progress</p>
-            <p className="text-xl font-extrabold text-[var(--navy)]">{primary.progress_percent}%</p>
+            <p className="text-xl font-semibold tracking-[-0.02em] text-[var(--navy)]">
+              {primary.progress_percent}%
+            </p>
             {daysLeft != null ? (
               <p className="text-xs text-[var(--gray-500)]">
                 {daysLeft >= 0 ? `${daysLeft} days to target` : `${Math.abs(daysLeft)} days past target`}
@@ -62,40 +64,48 @@ export function SiteEngineerDashboard({ firstName, companyName, projects }: Prop
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <section className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-4 shadow-sm lg:col-span-1">
-          <h2 className="text-sm font-semibold text-[var(--navy)]">Today&apos;s checklist</h2>
+        <section className="dash-panel p-4 lg:col-span-1">
+          <h2 className="dash-panel__title">Today&apos;s checklist</h2>
           <ul className="mt-3 space-y-2 text-sm text-[var(--gray-600)]">
             <li className="flex gap-2">
-              <span className="mt-0.5 h-4 w-4 rounded border border-[var(--gray-300)]" />
+              <span className="mt-0.5 h-4 w-4 rounded border border-[var(--gray-200)] bg-[var(--gray-50)]" />
               Review open inspections
             </li>
             <li className="flex gap-2">
-              <span className="mt-0.5 h-4 w-4 rounded border border-[var(--gray-300)]" />
+              <span className="mt-0.5 h-4 w-4 rounded border border-[var(--gray-200)] bg-[var(--gray-50)]" />
               Update daily site diary
             </li>
             <li className="flex gap-2">
-              <span className="mt-0.5 h-4 w-4 rounded border border-[var(--gray-300)]" />
+              <span className="mt-0.5 h-4 w-4 rounded border border-[var(--gray-200)] bg-[var(--gray-50)]" />
               Confirm material deliveries
             </li>
             <li className="flex gap-2">
-              <span className="mt-0.5 h-4 w-4 rounded border border-[var(--gray-300)]" />
+              <span className="mt-0.5 h-4 w-4 rounded border border-[var(--gray-200)] bg-[var(--gray-50)]" />
               Sync task progress with crews
             </li>
           </ul>
         </section>
 
-        <section className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-4 shadow-sm lg:col-span-1">
-          <h2 className="text-sm font-semibold text-[var(--navy)]">Quick actions</h2>
+        <section className="dash-panel p-4 lg:col-span-1">
+          <h2 className="dash-panel__title">Quick actions</h2>
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <QuickAction href="/dashboard/diary" label="Daily diary" />
-            <QuickAction href="/dashboard/inspections" label="Inspection" />
-            <QuickAction href="/dashboard/tasks" label="Tasks" />
-            <QuickAction href="/dashboard/inventory" label="Materials" />
+            <Link href="/dashboard/diary" className="dash-quick-link text-center">
+              Daily diary
+            </Link>
+            <Link href="/dashboard/inspections" className="dash-quick-link text-center">
+              Inspection
+            </Link>
+            <Link href="/dashboard/tasks" className="dash-quick-link text-center">
+              Tasks
+            </Link>
+            <Link href="/dashboard/inventory" className="dash-quick-link text-center">
+              Materials
+            </Link>
           </div>
         </section>
 
-        <section className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-4 shadow-sm">
-          <h2 className="text-sm font-semibold text-[var(--navy)]">Projects on your radar</h2>
+        <section className="dash-panel p-4">
+          <h2 className="dash-panel__title">Projects on your radar</h2>
           <ul className="mt-3 space-y-2">
             {projects.slice(0, 4).map((p) => (
               <li key={p.id} className="flex items-center justify-between gap-2 text-sm">
@@ -109,24 +119,13 @@ export function SiteEngineerDashboard({ firstName, companyName, projects }: Prop
           </ul>
           <Link
             href="/dashboard/projects"
-            className="mt-3 inline-block text-xs font-semibold text-[var(--orange-hover)] hover:underline"
+            className="mt-3 inline-block text-xs font-medium text-[var(--gray-500)] hover:text-[var(--navy)]"
           >
-            Open projects
+            Open projects →
           </Link>
         </section>
       </div>
     </div>
-  );
-}
-
-function QuickAction({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      className="rounded-lg bg-[var(--navy)] px-3 py-3 text-center text-xs font-semibold text-white hover:bg-[var(--navy-hover)]"
-    >
-      {label}
-    </Link>
   );
 }
 

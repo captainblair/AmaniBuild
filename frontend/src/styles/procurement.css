@@ -1,0 +1,346 @@
+/* Procurement module — soft modern (inside .dash-app) */
+
+.proc-page,
+.proc-detail {
+  min-width: 0;
+}
+
+.proc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 14px;
+}
+
+.proc-toolbar__search {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border: 1px solid var(--dash-line, var(--gray-200));
+  border-radius: 999px;
+  background: var(--dash-soft, var(--gray-50));
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.proc-toolbar__search:focus {
+  border-color: rgba(234, 179, 8, 0.55);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.15);
+}
+
+.proc-select,
+.proc-textarea {
+  width: 100%;
+  border: 1px solid var(--dash-line, var(--gray-200));
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  color: var(--navy);
+  outline: none;
+}
+
+.proc-toolbar .proc-select {
+  width: auto;
+  min-width: 150px;
+}
+
+.proc-select:focus,
+.proc-textarea:focus {
+  border-color: rgba(234, 179, 8, 0.55);
+  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.15);
+}
+
+.proc-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.proc-badge--good {
+  background: var(--green-bg);
+  color: #15803d;
+}
+
+.proc-badge--warn {
+  background: var(--amber-bg);
+  color: #a16207;
+}
+
+.proc-badge--danger {
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.proc-badge--muted {
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+.proc-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.proc-table th {
+  padding: 12px 16px;
+  background: var(--dash-soft, var(--gray-50));
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  border-bottom: 1px solid var(--dash-line, var(--gray-200));
+}
+
+.proc-table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+  border-top: 1px solid var(--gray-100);
+}
+
+.proc-table__link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.proc-table__link:hover span:first-child {
+  color: var(--orange-hover);
+}
+
+.proc-detail__crumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--gray-500);
+}
+
+.proc-detail__crumb a {
+  color: var(--navy);
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.proc-detail__crumb a:hover {
+  color: var(--orange-hover);
+}
+
+.proc-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.proc-steps__item {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--dash-line, var(--gray-200));
+  background: var(--dash-soft, #f6f7f9);
+}
+
+.proc-steps__item.is-done {
+  border-color: rgba(34, 197, 94, 0.35);
+  background: var(--green-bg);
+}
+
+.proc-steps__item.is-current {
+  border-color: rgba(234, 179, 8, 0.45);
+  background: rgba(234, 179, 8, 0.1);
+}
+
+.proc-steps__item.is-rejected {
+  border-color: rgba(220, 38, 38, 0.3);
+  background: var(--red-bg);
+}
+
+.proc-activity {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.proc-activity li {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--dash-line, var(--gray-200));
+}
+
+.proc-activity li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.proc-field {
+  display: grid;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--gray-600);
+}
+
+.proc-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.proc-estimate {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--dash-soft, #f6f7f9);
+  border: 1px solid var(--dash-line, var(--gray-200));
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--navy);
+}
+
+.proc-line {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--dash-line, var(--gray-200));
+  background: var(--dash-soft, #f6f7f9);
+}
+
+.proc-line__meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.proc-link-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 0.8rem;
+  font-weight: 550;
+  color: var(--gray-500);
+  cursor: pointer;
+}
+
+.proc-link-btn:hover {
+  color: var(--navy);
+}
+
+.proc-form-error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--red-bg);
+  color: var(--red);
+  font-size: 0.85rem;
+}
+
+.proc-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.proc-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba(17, 24, 39, 0.4);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+
+.proc-modal__panel {
+  position: relative;
+  z-index: 1;
+  width: min(640px, 100%);
+  max-height: min(92vh, 900px);
+  overflow: auto;
+  background: #fff;
+  border: 1px solid var(--dash-line, var(--gray-200));
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(17, 24, 39, 0.12);
+}
+
+.proc-modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 22px 14px;
+  border-bottom: 1px solid var(--dash-line, var(--gray-200));
+}
+
+.proc-modal__eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--gray-500);
+}
+
+.proc-modal__title {
+  margin: 4px 0 0;
+  font-size: 1.2rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+}
+
+.proc-modal__close {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--gray-500);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.proc-modal__close:hover {
+  background: var(--gray-50);
+  color: var(--navy);
+}
+
+.proc-modal__body {
+  display: grid;
+  gap: 14px;
+  padding: 16px 22px;
+}
+
+.proc-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 22px 20px;
+  border-top: 1px solid var(--dash-line, var(--gray-200));
+}
+
+@media (max-width: 640px) {
+  .proc-form-grid,
+  .proc-line__meta {
+    grid-template-columns: 1fr;
+  }
+
+  .proc-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .proc-toolbar .proc-select {
+    width: 100%;
+  }
+}

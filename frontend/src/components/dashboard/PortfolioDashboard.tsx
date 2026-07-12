@@ -20,7 +20,7 @@ export function PortfolioDashboard({ analytics, projects, firstName, companyName
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm font-semibold text-[var(--orange-hover)]">
+        <p className="text-sm font-medium text-[var(--gray-500)]">
           {variant === "owner" ? "Owner portfolio" : "Delivery snapshot"}
         </p>
         <h1

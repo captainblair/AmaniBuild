@@ -19,7 +19,7 @@ export function ForemanDashboard({ firstName, companyName, projects }: Props) {
     <div className="space-y-6">
       <div>
         <h1
-          className="text-2xl font-extrabold text-[var(--navy)]"
+          className="text-2xl font-semibold tracking-[-0.02em] text-[var(--navy)]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           Good day, {firstName}
@@ -45,11 +45,11 @@ export function ForemanDashboard({ firstName, companyName, projects }: Props) {
         />
       </div>
 
-      <section className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-5 shadow-sm">
+      <section className="dash-panel p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-sm font-semibold text-[var(--navy)]">Site snapshot</h2>
+          <h2 className="dash-panel__title">Site snapshot</h2>
           {primary ? (
-            <span className="rounded-full bg-[var(--green-bg)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--green)]">
+            <span className="rounded-full bg-[var(--green-bg)] px-2.5 py-0.5 text-[11px] font-medium text-[var(--green)]">
               {primary.status === "active" ? "Active" : primary.status}
             </span>
           ) : null}
@@ -89,22 +89,22 @@ export function ForemanDashboard({ firstName, companyName, projects }: Props) {
       </section>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <section className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-4 shadow-sm">
-          <h2 className="text-sm font-semibold text-[var(--navy)]">Today&apos;s focus</h2>
+        <section className="dash-panel p-4">
+          <h2 className="dash-panel__title">Today&apos;s focus</h2>
           <ul className="mt-3 space-y-2 text-sm text-[var(--gray-600)]">
             <li>Check attendance before work starts</li>
             <li>Update task progress for your crews</li>
             <li>Log any safety or material issues early</li>
           </ul>
         </section>
-        <section className="rounded-[var(--radius-lg)] border border-[var(--gray-200)] bg-white p-4 shadow-sm">
-          <h2 className="text-sm font-semibold text-[var(--navy)]">Safety reminder</h2>
+        <section className="dash-panel p-4">
+          <h2 className="dash-panel__title">Safety reminder</h2>
           <p className="mt-2 text-sm text-[var(--gray-600)]">
             PPE on at all times — helmet, boots, vest, gloves, and eye protection where required.
           </p>
           <Link
             href="/dashboard/inspections"
-            className="mt-4 inline-flex rounded-lg bg-[var(--navy)] px-3 py-2 text-xs font-semibold text-white hover:bg-[var(--navy-hover)]"
+            className="mt-4 inline-flex rounded-full bg-[var(--navy)] px-4 py-2 text-xs font-medium text-white hover:bg-[var(--navy-hover)]"
           >
             Report unsafe condition
           </Link>
@@ -126,12 +126,13 @@ function ActionCard({
   return (
     <Link
       href={href}
-      className="rounded-[var(--radius-lg)] bg-[var(--orange)] p-5 text-[var(--orange-ink)] shadow-sm transition hover:bg-[var(--orange-hover)] hover:text-white"
+      className="dash-panel block p-5 transition hover:-translate-y-0.5 hover:border-[rgba(234,179,8,0.35)]"
     >
-      <h2 className="text-base font-extrabold" style={{ fontFamily: "var(--font-display)" }}>
+      <h2 className="text-base font-semibold tracking-[-0.01em] text-[var(--navy)]" style={{ fontFamily: "var(--font-display)" }}>
         {title}
       </h2>
-      <p className="mt-1 text-sm opacity-80">{description}</p>
+      <p className="mt-1 text-sm text-[var(--gray-500)]">{description}</p>
+      <span className="mt-3 inline-flex text-xs font-medium text-[var(--orange-hover)]">Open →</span>
     </Link>
   );
 }

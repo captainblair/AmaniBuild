@@ -1,12 +1,20 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { Suspense } from "react";
+import { DiaryPage } from "@/components/diary/DiaryPage";
+import { Spinner } from "@/components/ui/Spinner";
+import "@/styles/diary.css";
 
 export const metadata = { title: "Site Diary" };
 
-export default function DiaryPlaceholderPage() {
+export default function DiaryRoutePage() {
   return (
-    <ModulePlaceholder
-      title="Site Diary"
-      description="Daily site diary entries and history timeline land in FE Phase 6."
-    />
+    <Suspense
+      fallback={
+        <div className="flex justify-center py-16">
+          <Spinner label="Loading diary…" />
+        </div>
+      }
+    >
+      <DiaryPage />
+    </Suspense>
   );
 }

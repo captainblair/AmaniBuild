@@ -1,13 +1,20 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { Suspense } from "react";
+import { ProjectsPage } from "@/components/projects/ProjectsPage";
+import { Spinner } from "@/components/ui/Spinner";
+import "@/styles/projects.css";
 
 export const metadata = { title: "Projects" };
 
-export default function ProjectsPlaceholderPage() {
+export default function ProjectsRoutePage() {
   return (
-    <ModulePlaceholder
-      title="Projects"
-      description="List and detail views for your construction projects land in FE Phase 5."
-      phaseHint="Wireframes: projects list page, project detail overview"
-    />
+    <Suspense
+      fallback={
+        <div className="flex justify-center py-16">
+          <Spinner label="Loading projects…" />
+        </div>
+      }
+    >
+      <ProjectsPage />
+    </Suspense>
   );
 }

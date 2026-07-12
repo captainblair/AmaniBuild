@@ -1,12 +1,20 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { Suspense } from "react";
+import { ProcurementPage } from "@/components/procurement/ProcurementPage";
+import { Spinner } from "@/components/ui/Spinner";
+import "@/styles/procurement.css";
 
 export const metadata = { title: "Procurement" };
 
-export default function ProcurementPlaceholderPage() {
+export default function ProcurementRoutePage() {
   return (
-    <ModulePlaceholder
-      title="Procurement"
-      description="Purchase requests and approvals land in a later phase."
-    />
+    <Suspense
+      fallback={
+        <div className="flex justify-center py-16">
+          <Spinner label="Loading procurement…" />
+        </div>
+      }
+    >
+      <ProcurementPage />
+    </Suspense>
   );
 }

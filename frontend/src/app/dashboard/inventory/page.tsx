@@ -1,12 +1,20 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { Suspense } from "react";
+import { InventoryPage } from "@/components/inventory/InventoryPage";
+import { Spinner } from "@/components/ui/Spinner";
+import "@/styles/inventory.css";
 
 export const metadata = { title: "Inventory" };
 
-export default function InventoryPlaceholderPage() {
+export default function InventoryRoutePage() {
   return (
-    <ModulePlaceholder
-      title="Inventory"
-      description="Stock levels and material alerts land in a later phase."
-    />
+    <Suspense
+      fallback={
+        <div className="flex justify-center py-16">
+          <Spinner label="Loading inventory…" />
+        </div>
+      }
+    >
+      <InventoryPage />
+    </Suspense>
   );
 }

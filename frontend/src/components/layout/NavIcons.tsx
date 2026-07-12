@@ -183,12 +183,32 @@ export function IconHome({ className }: IconProps) {
   );
 }
 
+export function IconDocuments({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className={iconClass(className)} aria-hidden>
+      <path d="M8 3.5h5.5L18 8v12.5a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z" />
+      <path d="M13 3.5V8h4.5M9.5 12h5M9.5 15.5h5" />
+    </svg>
+  );
+}
+
+export function IconMessages({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className={iconClass(className)} aria-hidden>
+      <path d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v7A2.5 2.5 0 0 1 16.5 16H10l-4 3.5V16H7.5A2.5 2.5 0 0 1 5 13.5v-7z" />
+      <path d="M8.5 9h7M8.5 12h4.5" />
+    </svg>
+  );
+}
+
 export const NAV_ICONS: Record<string, (props: IconProps) => ReactNode> = {
   dashboard: IconDashboard,
   projects: IconProjects,
   diary: IconDiary,
   attendance: IconAttendance,
   tasks: IconTasks,
+  documents: IconDocuments,
+  messages: IconMessages,
   inspections: IconInspections,
   procurement: IconProcurement,
   inventory: IconInventory,

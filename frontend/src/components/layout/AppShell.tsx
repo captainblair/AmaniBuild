@@ -12,19 +12,17 @@ type AppShellProps = {
 };
 
 export function AppShell({ children, title, subtitle }: AppShellProps) {
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className={`dash-app ${collapsed ? "dash-app--collapsed" : ""}`}>
+    <div className="dash-app">
       <Sidebar
-        collapsed={collapsed}
+        collapsed={false}
         mobileOpen={mobileOpen}
         onCloseMobile={() => setMobileOpen(false)}
       />
       <div className="dash-main">
         <TopBar
-          onToggleSidebar={() => setCollapsed((v) => !v)}
           onOpenMobile={() => setMobileOpen(true)}
           title={title}
           subtitle={subtitle}

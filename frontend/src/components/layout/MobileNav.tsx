@@ -21,12 +21,10 @@ export function MobileNav() {
           <Link
             key={tab.id}
             href={tab.href}
-            className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium ${
-              active ? "text-[var(--orange)]" : "text-white/55"
-            }`}
+            className={`dash-mobile-nav__tab${active ? " is-active" : ""}`}
           >
             <Icon className="h-5 w-5" />
-            <span>{tab.label}</span>
+            <span className="truncate">{tab.label}</span>
           </Link>
         );
       })}

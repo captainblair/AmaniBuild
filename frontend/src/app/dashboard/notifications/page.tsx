@@ -1,12 +1,20 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { Suspense } from "react";
+import { NotificationsPage } from "@/components/notifications/NotificationsPage";
+import { Spinner } from "@/components/ui/Spinner";
+import "@/styles/notifications.css";
 
 export const metadata = { title: "Notifications" };
 
-export default function NotificationsPlaceholderPage() {
+export default function NotificationsRoutePage() {
   return (
-    <ModulePlaceholder
-      title="Notifications"
-      description="In-app notification center lands in a later phase."
-    />
+    <Suspense
+      fallback={
+        <div className="flex justify-center py-16">
+          <Spinner label="Loading notifications…" />
+        </div>
+      }
+    >
+      <NotificationsPage />
+    </Suspense>
   );
 }

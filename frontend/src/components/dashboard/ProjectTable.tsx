@@ -29,15 +29,15 @@ export function ProjectTable({ projects }: ProjectTableProps) {
 
   return (
     <div className="dash-panel overflow-hidden">
-      <div className="flex items-center justify-between border-b-2 border-[var(--navy)] px-4 py-3">
+      <div className="flex items-center justify-between border-b border-[var(--dash-line)] px-4 py-3.5">
         <h2 className="dash-panel__title">Projects</h2>
-        <Link href="/dashboard/projects" className="text-xs font-bold text-[var(--orange-hover)] hover:underline">
+        <Link href="/dashboard/projects" className="text-xs font-medium text-[var(--gray-500)] hover:text-[var(--navy)]">
           View all
         </Link>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] text-left text-sm">
-          <thead className="bg-[var(--gray-50)] text-xs uppercase tracking-wide text-[var(--gray-500)]">
+          <thead className="bg-[var(--gray-50)] text-xs text-[var(--gray-500)]">
             <tr>
               <th className="px-4 py-2.5 font-medium">Name</th>
               <th className="px-4 py-2.5 font-medium">Progress</th>

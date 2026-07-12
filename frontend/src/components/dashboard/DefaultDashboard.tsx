@@ -15,7 +15,7 @@ export function DefaultDashboard({ firstName, companyName, roleLabel, projects }
     <div className="space-y-6">
       <div>
         <h1
-          className="text-2xl font-extrabold text-[var(--navy)]"
+          className="text-2xl font-semibold tracking-[-0.02em] text-[var(--navy)]"
           style={{ fontFamily: "var(--font-display)" }}
         >
           Welcome, {firstName}

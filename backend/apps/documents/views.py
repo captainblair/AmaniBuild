@@ -19,6 +19,7 @@ from apps.documents.serializers import (
     LibraryItemVersionSerializer,
     LibraryVersionCreateSerializer,
 )
+from apps.core.storage import save_library_upload
 from apps.documents.services import (
     apply_library_filters,
     create_library_item,
@@ -64,6 +65,34 @@ class LibraryListCreateView(APIView):
             raise AmaniBuildAPIException("title is required.", code="validation_error")
         item = create_library_item(request.company, request.user, serializer.validated_data)
         return _success({"item": LibraryItemSerializer(item).data}, status.HTTP_201_CREATED)
+
+
+class LibraryFileUploadView(APIView):
+    permission_classes = [IsAuthenticated, CanManageDocuments]
+
+    @extend_schema(tags=["Documents"])
+    def post(self, request):
+        uploaded = request.FILES.get("file")
+        if not uploaded:
+            raise AmaniBuildAPIException("file is required.", code="validation_error")
+        if uploaded.size and uploaded.size > 50 * 1024 * 1024:
+            raise AmaniBuildAPIException("File exceeds 50MB limit.", code="validation_error")
+
+        saved = save_library_upload(request.company.id, uploaded)
+        file_url = saved["file_url"]
+        if file_url.startswith("/"):
+            file_url = request.build_absolute_uri(file_url)
+
+        return _success(
+            {
+                "file_url": file_url,
+                "file_extension": saved["file_extension"],
+                "mime_type": saved["mime_type"],
+                "size_bytes": saved["size_bytes"],
+                "original_name": saved["original_name"],
+            },
+            status.HTTP_201_CREATED,
+        )
 
 
 class LibraryFoldersView(APIView):

@@ -2,13 +2,13 @@
 
 **Construction management SaaS for Kenyan builders** — multi-tenant, role-based, API-first.
 
-AmaniBuild helps contractors manage projects, sites, teams, procurement, inventory, quality, finances, and client communication from one platform. This repository contains the **frozen wireframe catalog**, the **complete MVP backend API** (Django/DRF, phases 0–17), and the **frontend app** (Next.js — FE Phase 0 complete).
+AmaniBuild helps contractors manage projects, sites, teams, procurement, inventory, quality, finances, and client communication from one platform. This repository contains the **frozen wireframe catalog**, the **complete MVP backend API** (Django/DRF, phases 0–17), and the **frontend app** (Next.js — FE Phase 13 complete).
 
 | Layer | Status | Health / version |
 |-------|--------|------------------|
 | Wireframes | Frozen (31 screens) | `wireframes/index.html` |
 | Backend API | **MVP complete** (Phases 0–17) | `GET /api/v1/health/` → `17-scheduling` |
-| Frontend | **FE Phase 3 complete** (onboarding) | http://localhost:3000 |
+| Frontend | **FE Phase 13 complete** (team messaging) | http://localhost:3000 |
 
 **Repository:** [github.com/captainblair/AmaniBuild](https://github.com/captainblair/AmaniBuild)
 
@@ -107,12 +107,13 @@ Amani Build/
 │   ├── config/
 │   ├── requirements/
 │   └── docker-compose.yml
-└── frontend/                 ← Next.js app (FE Phase 0 complete)
+└── frontend/                 ← Next.js app (FE Phase 13 complete)
     ├── README.md             ← Frontend quick-start
     └── src/
         ├── app/              # Pages & layouts
-        ├── components/       # UI, layout, dev utilities
-        └── lib/              # API client, auth storage
+        ├── components/       # UI, layout, module screens
+        ├── lib/              # API client, auth, labels
+        └── styles/           # Soft dashboard module CSS
 ```
 
 ---
@@ -298,6 +299,7 @@ Plan limits (`max_projects`) enforced on create.
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/api/v1/documents/` | GET/POST | Library list / upload metadata |
+| `/api/v1/documents/upload/` | POST | Multipart file upload (local MEDIA or MinIO) |
 | `/api/v1/documents/folders/` | GET | Folder tree |
 | `/api/v1/documents/photos/` | GET | Photo timeline |
 | `/api/v1/documents/<id>/` | GET/PATCH/DELETE | Item CRUD |
@@ -504,7 +506,7 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 ---
 
-### FE Phase 5 — Projects module
+### FE Phase 5 — Projects module ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -515,7 +517,7 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 ---
 
-### FE Phase 6 — Site diary
+### FE Phase 6 — Site diary ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -526,7 +528,7 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 ---
 
-### FE Phase 7 — Attendance
+### FE Phase 7 — Attendance ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -535,9 +537,11 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/projects/<id>/attendance/*`, `/api/v1/attendance/*`
 
+**Shipped:** project attendance dashboard (KPIs, roster cards, date filter), assign workers, manual mark, check-in point codes, worker clock in/out + QR code entry, 7-day trend, worker history.
+
 ---
 
-### FE Phase 8 — Procurement
+### FE Phase 8 — Procurement ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -545,9 +549,11 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/purchase-requests/*`
 
+**Shipped:** purchase request list with filters/KPIs, create/edit draft with line items, detail view with submit → manager → owner approval, reject with reason, activity timeline.
+
 ---
 
-### FE Phase 9 — Inventory
+### FE Phase 9 — Inventory ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -555,9 +561,11 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/inventory/*`
 
+**Shipped:** inventory dashboard KPIs/alerts, materials list with filters, add/edit items, stock in/out (incl. wastage), item detail + movement history, category value breakdown.
+
 ---
 
-### FE Phase 10 — Tasks board
+### FE Phase 10 — Tasks board ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -565,19 +573,23 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/tasks/*`, `/api/v1/projects/<id>/tasks/*`
 
+**Shipped:** company Kanban board with status moves, filters, my-tasks view, create/edit tasks with assignee, detail page with comments and status controls.
+
 ---
 
-### FE Phase 11 — Documents & photos
+### FE Phase 11 — Documents & photos ✅
 
 | Screens | Wireframe |
 |---------|-----------|
 | Library + folders | `documents photos library.png` |
 
-**API:** `/api/v1/documents/*` (+ MinIO upload integration)
+**API:** `/api/v1/documents/*` (+ `POST /documents/upload/` for MinIO/local media)
+
+**Shipped:** folder tree, document list/grid, photo timeline, upload with file storage, preview panel with version history and new-version upload, project/search filters.
 
 ---
 
-### FE Phase 12 — Notifications & activity
+### FE Phase 12 — Notifications & activity ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -585,15 +597,19 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/notifications/*`, `/api/v1/activity/`
 
+**Shipped:** inbox with search/tabs/category filters, detail + action links, grouped alert cards, activity timeline, mark read / mark all read, top-bar unread badge.
+
 ---
 
-### FE Phase 13 — Team messaging
+### FE Phase 13 — Team messaging ✅
 
 | Screens | Wireframe |
 |---------|-----------|
 | Channels + chat | `team communication collaboration.png` |
 
 **API:** `/api/v1/conversations/*`
+
+**Shipped:** project/team channel list, create team channel, open/create project channel, chat thread with polling, announcements, mentions list, shared files panel, unread badges.
 
 ---
 
