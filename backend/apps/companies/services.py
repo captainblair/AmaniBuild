@@ -97,3 +97,38 @@ def complete_onboarding(company: Company) -> Company:
     company.onboarding_completed_at = timezone.now()
     company.save(update_fields=["onboarding_step", "onboarding_completed_at", "updated_at"])
     return company
+
+
+def change_company_plan(company: Company, plan_code: str) -> Company:
+    """Switch company subscription tier. Payment collection is stubbed for MVP."""
+    from apps.companies.invitation_services import get_company_seat_usage
+    from apps.companies.models import SubscriptionPlan
+    from apps.core.exceptions import AmaniBuildAPIException
+    from apps.projects.services import get_company_project_count
+
+    plan = SubscriptionPlan.objects.filter(code=plan_code, is_active=True).first()
+    if not plan:
+        raise AmaniBuildAPIException("Invalid subscription plan.", code="invalid_plan")
+
+    if company.plan_id == plan.id:
+        raise AmaniBuildAPIException("You are already on this plan.", code="plan_unchanged")
+
+    project_count = get_company_project_count(company)
+    if project_count > plan.max_projects:
+        raise AmaniBuildAPIException(
+            f"Cannot switch to {plan.name}: you have {project_count} projects but this plan "
+            f"allows {plan.max_projects}. Archive projects first.",
+            code="plan_downgrade_blocked",
+        )
+
+    seat_usage = get_company_seat_usage(company)
+    if seat_usage > plan.max_users:
+        raise AmaniBuildAPIException(
+            f"Cannot switch to {plan.name}: you have {seat_usage} seats in use but this plan "
+            f"allows {plan.max_users}. Remove members or pending invites first.",
+            code="plan_downgrade_blocked",
+        )
+
+    company.plan = plan
+    company.save(update_fields=["plan", "updated_at"])
+    return company

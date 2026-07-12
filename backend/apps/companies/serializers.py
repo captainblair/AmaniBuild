@@ -75,6 +75,10 @@ class CompanyCreateSerializer(serializers.Serializer):
     )
 
 
+class CompanyPlanChangeSerializer(serializers.Serializer):
+    plan_code = serializers.ChoiceField(choices=SubscriptionPlan.Tier.choices)
+
+
 class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site

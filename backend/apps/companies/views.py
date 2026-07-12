@@ -17,6 +17,7 @@ from apps.companies.models import (
 from apps.companies.permissions import HasCompanyAccess, IsCompanyOwner
 from apps.companies.serializers import (
     CompanyCreateSerializer,
+    CompanyPlanChangeSerializer,
     CompanySerializer,
     OnboardingStatusSerializer,
     SiteCreateSerializer,
@@ -26,6 +27,7 @@ from apps.companies.serializers import (
 from apps.companies.site_services import create_site
 from apps.companies.services import (
     advance_onboarding,
+    change_company_plan,
     complete_onboarding,
     get_user_primary_company,
 )
@@ -216,3 +218,21 @@ class CompanyDetailView(APIView):
     @extend_schema(tags=["Companies"])
     def get(self, request):
         return _success({"company": CompanySerializer(request.company).data})
+
+
+class CompanyPlanChangeView(APIView):
+    """Owner-only plan switch. Billing/payment is stubbed until integrations phase."""
+
+    permission_classes = [IsAuthenticated, HasCompanyAccess, IsCompanyOwner]
+
+    @extend_schema(request=CompanyPlanChangeSerializer, tags=["Companies"])
+    def post(self, request):
+        serializer = CompanyPlanChangeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        company = change_company_plan(request.company, serializer.validated_data["plan_code"])
+        return _success(
+            {
+                "message": f"Plan updated to {company.plan.name}.",
+                "company": CompanySerializer(company).data,
+            }
+        )

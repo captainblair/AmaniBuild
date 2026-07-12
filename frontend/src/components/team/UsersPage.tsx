@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { PlanLimitNotice } from "@/components/billing/PlanLimitNotice";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
 import { Spinner } from "@/components/ui/Spinner";
@@ -11,6 +12,7 @@ import {
   fetchCompanyRoles,
   fetchInvitations,
 } from "@/lib/api/onboarding";
+import { isPlanLimitError } from "@/lib/api/plans";
 import {
   deactivateCompanyMember,
   fetchCompanyMembers,
@@ -29,6 +31,7 @@ export function UsersPage() {
   const [roles, setRoles] = useState<CompanyRoleOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [planLimitCode, setPlanLimitCode] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("worker");
   const [jobTitle, setJobTitle] = useState("");
@@ -67,6 +70,7 @@ export function UsersPage() {
     if (!canManage || !email.trim()) return;
     setBusy(true);
     setError(null);
+    setPlanLimitCode(null);
     try {
       await createInvitation({
         email: email.trim(),
@@ -77,7 +81,12 @@ export function UsersPage() {
       setJobTitle("");
       await load();
     } catch (err) {
-      setError(err instanceof ApiClientError ? err.message : "Could not send invite.");
+      if (isPlanLimitError(err)) {
+        setPlanLimitCode(err.code);
+        setError(err.message);
+      } else {
+        setError(err instanceof ApiClientError ? err.message : "Could not send invite.");
+      }
     } finally {
       setBusy(false);
     }
@@ -128,7 +137,11 @@ export function UsersPage() {
         </p>
       </header>
 
-      {error ? <p className="team-error">{error}</p> : null}
+      {error && planLimitCode ? (
+        <PlanLimitNotice message={error} reason={planLimitCode} nextPath="/dashboard/users" />
+      ) : error ? (
+        <p className="team-error">{error}</p>
+      ) : null}
 
       {!canManage ? (
         <p className="text-sm text-[var(--gray-500)]">

@@ -315,6 +315,39 @@
   font-size: 0.85rem;
 }
 
+.plan-limit-notice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 1px solid rgba(234, 179, 8, 0.35);
+}
+
+.plan-limit-notice__msg {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #9a3412;
+  line-height: 1.45;
+}
+
+.plan-limit-notice__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.plan-limit-notice__link {
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: var(--navy);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .proj-modal__actions {
   display: flex;
   justify-content: flex-end;

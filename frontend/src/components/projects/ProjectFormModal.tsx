@@ -1,9 +1,11 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { PlanLimitNotice } from "@/components/billing/PlanLimitNotice";
 import { Button } from "@/components/ui/Button";
 import { TextInput } from "@/components/ui/TextInput";
 import { ApiClientError } from "@/lib/api/client";
+import { isPlanLimitError } from "@/lib/api/plans";
 import { createProject, updateProject } from "@/lib/api/projects";
 import { fetchCompanySites } from "@/lib/api/sites";
 import type { Project, ProjectWriteInput, Site } from "@/lib/api/types";
@@ -35,6 +37,7 @@ export function ProjectFormModal({ open, onClose, onSaved, initial }: ProjectFor
   const [form, setForm] = useState(emptyForm);
   const [sites, setSites] = useState<Site[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [planLimitCode, setPlanLimitCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -58,6 +61,7 @@ export function ProjectFormModal({ open, onClose, onSaved, initial }: ProjectFor
       setForm(emptyForm);
     }
     setError(null);
+    setPlanLimitCode(null);
     void fetchCompanySites()
       .then(setSites)
       .catch(() => setSites([]));
@@ -71,6 +75,7 @@ export function ProjectFormModal({ open, onClose, onSaved, initial }: ProjectFor
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setError(null);
+    setPlanLimitCode(null);
     setLoading(true);
     try {
       const payload: ProjectWriteInput = {
@@ -94,7 +99,12 @@ export function ProjectFormModal({ open, onClose, onSaved, initial }: ProjectFor
       onSaved(project);
       onClose();
     } catch (err) {
-      setError(err instanceof ApiClientError ? err.message : "Could not save project.");
+      if (isPlanLimitError(err)) {
+        setPlanLimitCode(err.code);
+        setError(err.message);
+      } else {
+        setError(err instanceof ApiClientError ? err.message : "Could not save project.");
+      }
     } finally {
       setLoading(false);
     }
@@ -224,7 +234,15 @@ export function ProjectFormModal({ open, onClose, onSaved, initial }: ProjectFor
             />
           </div>
 
-          {error ? <p className="proj-form-error">{error}</p> : null}
+          {error && planLimitCode ? (
+            <PlanLimitNotice
+              message={error}
+              reason={planLimitCode}
+              nextPath="/dashboard/projects"
+            />
+          ) : error ? (
+            <p className="proj-form-error">{error}</p>
+          ) : null}
         </div>
 
         <div className="proj-modal__actions">

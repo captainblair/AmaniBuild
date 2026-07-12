@@ -16,6 +16,7 @@ from apps.companies.team_views import (
 from apps.companies.views import (
     CompanyCreateView,
     CompanyDetailView,
+    CompanyPlanChangeView,
     OnboardingCompleteView,
     OnboardingStatusView,
     SiteCreateView,
@@ -29,6 +30,7 @@ urlpatterns = [
     path("onboarding/site/", SiteCreateView.as_view(), name="onboarding-site"),
     path("onboarding/complete/", OnboardingCompleteView.as_view(), name="onboarding-complete"),
     path("company/", CompanyDetailView.as_view(), name="company-detail"),
+    path("company/plan/", CompanyPlanChangeView.as_view(), name="company-plan-change"),
     path("company/sites/", SiteListCreateView.as_view(), name="company-sites"),
     path("company/sites/<uuid:site_id>/", SiteDetailView.as_view(), name="company-site-detail"),
     path("company/members/", CompanyMemberListView.as_view(), name="company-members"),

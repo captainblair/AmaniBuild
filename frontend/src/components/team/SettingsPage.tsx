@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { Spinner } from "@/components/ui/Spinner";
 import { ApiClientError } from "@/lib/api/client";
 import { fetchCompanySites } from "@/lib/api/sites";
@@ -106,6 +107,13 @@ export function SettingsPage() {
         ) : (
           <p className="mt-3 text-sm text-[var(--gray-500)]">Company profile unavailable.</p>
         )}
+        {membership.role === "owner" ? (
+          <div className="mt-4">
+            <Button href="/dashboard/settings/billing" size="sm">
+              Upgrade plan
+            </Button>
+          </div>
+        ) : null}
       </section>
 
       <section className="dash-panel p-5">

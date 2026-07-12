@@ -111,3 +111,36 @@ def test_cannot_create_duplicate_company(auth_client, plans):
         format="json",
     )
     assert second.status_code == 400
+
+
+@pytest.mark.django_db
+def test_owner_can_upgrade_plan(auth_client, plans):
+    SubscriptionPlan.objects.get_or_create(
+        code="starter",
+        defaults={
+            "name": "Starter",
+            "price_kes_monthly": 3500,
+            "max_projects": 5,
+            "max_users": 15,
+            "max_storage_gb": 10,
+        },
+    )
+    auth_client.post(
+        reverse("onboarding-company"),
+        {"name": "Simba Contractors Ltd", "plan_code": "free", "county": "Nairobi"},
+        format="json",
+    )
+    auth_client.post(
+        reverse("onboarding-site"),
+        {"name": "Main Site", "city": "Nairobi", "county": "Nairobi"},
+        format="json",
+    )
+    auth_client.post(reverse("onboarding-complete"), format="json")
+
+    upgrade = auth_client.post(
+        reverse("company-plan-change"),
+        {"plan_code": "starter"},
+        format="json",
+    )
+    assert upgrade.status_code == 200
+    assert upgrade.data["data"]["company"]["plan"]["code"] == "starter"

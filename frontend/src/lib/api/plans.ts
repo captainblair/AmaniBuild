@@ -1,5 +1,6 @@
+import { apiDataRequest, ApiClientError } from "@/lib/api/client";
 import { getApiBaseUrl } from "@/lib/api/config";
-import type { SubscriptionPlan, SubscriptionPlansResponse } from "@/lib/api/types";
+import type { Company, SubscriptionPlan, SubscriptionPlansResponse } from "@/lib/api/types";
 
 const FALLBACK_PLANS: SubscriptionPlan[] = [
   {
@@ -55,9 +56,48 @@ export async function fetchSubscriptionPlans(): Promise<SubscriptionPlan[]> {
   }
 }
 
+/** Authenticated plans fetch for dashboard upgrade UI. */
+export async function fetchPlansForUpgrade(): Promise<SubscriptionPlan[]> {
+  try {
+    const data = await apiDataRequest<{ plans: SubscriptionPlan[] }>("/plans/", {
+      method: "GET",
+      auth: false,
+      company: false,
+    });
+    return data.plans?.length ? data.plans : FALLBACK_PLANS;
+  } catch {
+    return fetchSubscriptionPlans();
+  }
+}
+
+export async function changeCompanyPlan(planCode: string): Promise<{ message: string; company: Company }> {
+  return apiDataRequest("/company/plan/", {
+    method: "POST",
+    body: JSON.stringify({ plan_code: planCode }),
+  });
+}
+
 export function formatPlanPrice(plan: SubscriptionPlan): string {
   if (plan.code === "enterprise") return "Custom";
   const amount = Number(plan.price_kes_monthly);
   if (amount === 0) return "Free";
-  return `KSh ${amount.toLocaleString("en-KE")}`;
+  return `KSh ${amount.toLocaleString("en-KE")}/mo`;
+}
+
+export function isPlanLimitError(err: unknown): err is ApiClientError {
+  return (
+    err instanceof ApiClientError &&
+    (err.code === "plan_project_limit" || err.code === "plan_user_limit")
+  );
+}
+
+export function upgradeHref(options?: {
+  reason?: string;
+  next?: string;
+}): string {
+  const params = new URLSearchParams();
+  if (options?.reason) params.set("reason", options.reason);
+  if (options?.next) params.set("next", options.next);
+  const qs = params.toString();
+  return qs ? `/dashboard/settings/billing?${qs}` : "/dashboard/settings/billing";
 }
