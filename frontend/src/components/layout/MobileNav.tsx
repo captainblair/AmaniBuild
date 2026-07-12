@@ -16,7 +16,9 @@ export function MobileNav() {
       {tabs.map((tab) => {
         const Icon = NAV_ICONS[tab.id] ?? NAV_ICONS.more;
         const active =
-          tab.href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(tab.href);
+          tab.href === "/dashboard"
+            ? pathname === "/dashboard" || pathname.startsWith("/dashboard/portal")
+            : pathname.startsWith(tab.href);
         return (
           <Link
             key={tab.id}

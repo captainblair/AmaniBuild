@@ -201,6 +201,16 @@ export function IconMessages({ className }: IconProps) {
   );
 }
 
+export function IconExpenses({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" className={iconClass(className)} aria-hidden>
+      <rect x="4" y="5" width="16" height="14" rx="2" />
+      <path d="M8 9h8M8 12.5h5" />
+      <circle cx="16.5" cy="14.5" r="1.5" />
+    </svg>
+  );
+}
+
 export const NAV_ICONS: Record<string, (props: IconProps) => ReactNode> = {
   dashboard: IconDashboard,
   projects: IconProjects,
@@ -212,6 +222,8 @@ export const NAV_ICONS: Record<string, (props: IconProps) => ReactNode> = {
   inspections: IconInspections,
   procurement: IconProcurement,
   inventory: IconInventory,
+  expenses: IconExpenses,
+  schedule: IconEquipment,
   equipment: IconEquipment,
   workforce: IconWorkforce,
   reports: IconReports,

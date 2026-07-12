@@ -5,6 +5,9 @@ import { DefaultDashboard } from "@/components/dashboard/DefaultDashboard";
 import { ForemanDashboard } from "@/components/dashboard/ForemanDashboard";
 import { PortfolioDashboard } from "@/components/dashboard/PortfolioDashboard";
 import { SiteEngineerDashboard } from "@/components/dashboard/SiteEngineerDashboard";
+import { WorkerDashboard } from "@/components/dashboard/WorkerDashboard";
+import { ClientPortalHome } from "@/components/portal/ClientPortalHome";
+import { Spinner } from "@/components/ui/Spinner";
 import { fetchProjects } from "@/lib/api/projects";
 import { fetchPortfolioAnalytics } from "@/lib/api/reports";
 import type { PortfolioAnalytics, ProjectListItem } from "@/lib/api/types";
@@ -19,6 +22,11 @@ export function DashboardHome() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (membership.role === "client") {
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
 
     async function load() {
@@ -53,10 +61,14 @@ export function DashboardHome() {
     };
   }, [membership.company_id, membership.permissions, membership.role]);
 
+  if (membership.role === "client") {
+    return <ClientPortalHome />;
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--orange)] border-t-transparent" />
+        <Spinner label="Loading dashboard…" />
       </div>
     );
   }
@@ -100,6 +112,16 @@ export function DashboardHome() {
   if (variant === "site_engineer") {
     return (
       <SiteEngineerDashboard
+        firstName={name}
+        companyName={membership.company_name}
+        projects={projects}
+      />
+    );
+  }
+
+  if (variant === "worker") {
+    return (
+      <WorkerDashboard
         firstName={name}
         companyName={membership.company_name}
         projects={projects}

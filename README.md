@@ -2,13 +2,13 @@
 
 **Construction management SaaS for Kenyan builders** — multi-tenant, role-based, API-first.
 
-AmaniBuild helps contractors manage projects, sites, teams, procurement, inventory, quality, finances, and client communication from one platform. This repository contains the **frozen wireframe catalog**, the **complete MVP backend API** (Django/DRF, phases 0–17), and the **frontend app** (Next.js — FE Phase 13 complete).
+AmaniBuild helps contractors manage projects, sites, teams, procurement, inventory, quality, finances, and client communication from one platform. This repository contains the **frozen wireframe catalog**, the **complete MVP backend API** (Django/DRF, phases 0–17), and the **frontend app** (Next.js — FE Phase 19 complete).
 
 | Layer | Status | Health / version |
 |-------|--------|------------------|
 | Wireframes | Frozen (31 screens) | `wireframes/index.html` |
 | Backend API | **MVP complete** (Phases 0–17) | `GET /api/v1/health/` → `17-scheduling` |
-| Frontend | **FE Phase 13 complete** (team messaging) | http://localhost:3000 |
+| Frontend | **FE Phase 19 complete** (polish & cross-cutting) | http://localhost:3000 |
 
 **Repository:** [github.com/captainblair/AmaniBuild](https://github.com/captainblair/AmaniBuild)
 
@@ -107,7 +107,7 @@ Amani Build/
 │   ├── config/
 │   ├── requirements/
 │   └── docker-compose.yml
-└── frontend/                 ← Next.js app (FE Phase 13 complete)
+└── frontend/                 ← Next.js app (FE Phase 19 complete)
     ├── README.md             ← Frontend quick-start
     └── src/
         ├── app/              # Pages & layouts
@@ -613,7 +613,7 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 ---
 
-### FE Phase 14 — Reports & analytics
+### FE Phase 14 — Reports & analytics ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -621,9 +621,11 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/reports/*`, `/api/v1/projects/<id>/analytics/`
 
+**Shipped:** portfolio KPIs, report template grid, live project analytics preview, save generated reports, recent reports list, JSON download.
+
 ---
 
-### FE Phase 15 — Inspections (QA/QC)
+### FE Phase 15 — Inspections (QA/QC) ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -631,9 +633,11 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/inspections/*`
 
+**Shipped:** dashboard KPIs, filtered inspection list, create with type templates, detail checklist pass/fail, start → submit → review workflow, recent failures.
+
 ---
 
-### FE Phase 16 — Expenses & receipts
+### FE Phase 16 — Expenses & receipts ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -641,9 +645,11 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/expenses/*`
 
+**Shipped:** dashboard KPIs, filtered expense list, log/edit expense with receipt upload or URL, submit → approve/reject → reimburse workflow, category breakdown.
+
 ---
 
-### FE Phase 17 — Client portal
+### FE Phase 17 — Client portal ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -651,9 +657,11 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/client-portal/*`
 
+**Shipped:** client home with assigned projects, project progress overview (ring, budget when allowed, milestone stepper, diary timeline, photo grid), Photos/Documents/Messages tabs, staff client-access grant/revoke on project detail.
+
 ---
 
-### FE Phase 18 — Gantt / scheduling
+### FE Phase 18 — Gantt / scheduling ✅
 
 | Screens | Wireframe |
 |---------|-----------|
@@ -661,17 +669,21 @@ FE Phase 1 is **complete**. Remaining phases mirror the backend and wireframe ca
 
 **API:** `/api/v1/projects/<id>/schedule/*`, `/api/v1/schedule/*`
 
+**Shipped:** project Gantt with month timeline + today marker, KPIs/alerts, activity detail panel, create/edit tasks & milestones, phases, milestone list, sync from linked task.
+
 ---
 
-### FE Phase 19 — Polish & cross-cutting
+### FE Phase 19 — Polish & cross-cutting ✅
 
 | Goal | Notes |
 |------|-------|
-| Responsive / mobile | Worker flows, field use on site |
-| PWA / offline hints | Attendance clock, diary drafts |
-| Real-time (optional) | WebSocket for messaging/notifications |
-| File uploads | Wire MinIO presigned URLs |
-| E2E tests | Playwright/Cypress critical paths |
+| Responsive / mobile | Worker dashboard, role mobile tabs, larger clock targets |
+| PWA / offline hints | Web manifest, offline banner, clock queue + diary local drafts |
+| Real-time (optional) | Deferred — messaging/notifications keep polling |
+| File uploads | Diary photos via existing multipart upload API |
+| E2E tests | Playwright smoke (`npm run test:e2e`) |
+
+**Also shipped:** Users (invite/role/deactivate), Settings (company/sites/account), Help FAQ, Workforce → Users redirect.
 
 ---
 

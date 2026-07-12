@@ -32,6 +32,7 @@ export type DashboardVariant =
   | "project_manager"
   | "site_engineer"
   | "foreman"
+  | "worker"
   | "default";
 
 export function dashboardVariantForRole(role: string): DashboardVariant {
@@ -39,6 +40,7 @@ export function dashboardVariantForRole(role: string): DashboardVariant {
   if (role === "project_manager") return "project_manager";
   if (role === "site_engineer") return "site_engineer";
   if (role === "foreman") return "foreman";
+  if (role === "worker") return "worker";
   return "default";
 }
 

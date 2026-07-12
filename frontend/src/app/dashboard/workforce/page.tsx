@@ -1,12 +1,7 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { redirect } from "next/navigation";
 
 export const metadata = { title: "Workforce" };
 
-export default function WorkforcePlaceholderPage() {
-  return (
-    <ModulePlaceholder
-      title="Workforce"
-      description="Teams and workforce management land in a later phase."
-    />
-  );
+export default function WorkforceRoutePage() {
+  redirect("/dashboard/users");
 }

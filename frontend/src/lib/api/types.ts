@@ -1118,3 +1118,454 @@ export type ConversationSharedFile = {
   [key: string]: unknown;
 };
 
+export type ReportType =
+  | "progress"
+  | "cost_variance"
+  | "attendance_payroll"
+  | "material_usage"
+  | "diary_summary"
+  | "budget_vs_actual"
+  | "safety_incidents"
+  | "custom"
+  | string;
+
+export type ReportTemplate = {
+  report_type: ReportType;
+  label: string;
+};
+
+export type ReportGenerateInput = {
+  report_type: ReportType;
+  title?: string;
+  project_id?: string | null;
+  date_from?: string | null;
+  date_to?: string | null;
+  output_format?: string;
+};
+
+export type GeneratedReport = {
+  id: string;
+  report_type: ReportType;
+  title: string;
+  project: string | null;
+  project_name: string | null;
+  generated_by: { id: string; full_name: string; email: string } | null;
+  date_from: string | null;
+  date_to: string | null;
+  output_format: string;
+  status: string;
+  payload: Record<string, unknown>;
+  created_at: string;
+};
+
+export type ProjectAnalyticsResponse = {
+  project: { id: string; name: string };
+  analytics: Record<string, unknown>;
+};
+
+export type InspectionType =
+  | "general"
+  | "structural"
+  | "electrical"
+  | "plumbing"
+  | "finishing"
+  | "safety"
+  | "mep"
+  | "other"
+  | string;
+
+export type InspectionStatus =
+  | "draft"
+  | "scheduled"
+  | "in_progress"
+  | "submitted"
+  | "passed"
+  | "failed"
+  | string;
+
+export type InspectionResult = "pass" | "fail" | "conditional_pass" | string;
+
+export type InspectionChecklistItem = {
+  id: string;
+  section: string;
+  description: string;
+  required: boolean;
+  status: "pending" | "pass" | "fail" | string;
+  notes: string;
+};
+
+export type InspectionFinding = {
+  id: string;
+  severity: string;
+  description: string;
+  corrective_action: string;
+  due_date: string | null;
+  resolved: boolean;
+};
+
+export type InspectionListItem = {
+  id: string;
+  inspection_number: string;
+  title: string;
+  inspection_type: InspectionType;
+  area_location: string;
+  status: InspectionStatus;
+  result: InspectionResult | null;
+  score_percent: number;
+  scheduled_date: string | null;
+  inspected_at: string | null;
+  submitted_at: string | null;
+  reviewed_at: string | null;
+  project: string;
+  project_name: string;
+  inspector: string | null;
+  inspector_name: string | null;
+  open_findings_count: number;
+  failed_checklist_count: number;
+  created_at: string;
+};
+
+export type Inspection = InspectionListItem & {
+  description: string;
+  checklist_items: InspectionChecklistItem[];
+  findings: InspectionFinding[];
+  photos: Record<string, unknown>[];
+  reviewed_by: string | null;
+  reviewed_by_name: string | null;
+  created_by: string | null;
+  created_by_name: string | null;
+  updated_at: string;
+};
+
+export type InspectionWriteInput = {
+  title: string;
+  description?: string;
+  inspection_type?: InspectionType;
+  area_location?: string;
+  scheduled_date?: string | null;
+  inspector_id?: string | null;
+  use_template?: boolean;
+  checklist_items?: InspectionChecklistItem[];
+  findings?: InspectionFinding[];
+  photos?: Record<string, unknown>[];
+};
+
+export type InspectionReviewInput = {
+  result: InspectionResult;
+  notes?: string;
+};
+
+export type InspectionChecklistTemplate = {
+  inspection_type: InspectionType;
+  label: string;
+  items: { section: string; description: string; required: boolean }[];
+};
+
+export type InspectionDashboard = {
+  total_inspections: number;
+  by_status: {
+    draft: number;
+    scheduled: number;
+    in_progress: number;
+    submitted: number;
+    passed: number;
+    failed: number;
+  };
+  overdue_count: number;
+  pass_rate_percent: number;
+  recent_failed: {
+    id: string;
+    inspection_number: string;
+    title: string;
+    project__name: string;
+    reviewed_at: string | null;
+  }[];
+};
+
+export type ExpenseCategory =
+  | "materials"
+  | "labour"
+  | "transport"
+  | "fuel"
+  | "meals"
+  | "equipment"
+  | "utilities"
+  | "subcontractor"
+  | "other"
+  | string;
+
+export type ExpensePaymentMethod = "cash" | "mpesa" | "bank_transfer" | "card" | "other" | string;
+
+export type ExpenseStatus =
+  | "draft"
+  | "submitted"
+  | "approved"
+  | "rejected"
+  | "reimbursed"
+  | string;
+
+export type ExpenseReceiptPhoto = {
+  url?: string;
+  file_url?: string;
+  filename?: string;
+  name?: string;
+  [key: string]: unknown;
+};
+
+export type ExpenseListItem = {
+  id: string;
+  expense_number: string;
+  title: string;
+  category: ExpenseCategory;
+  amount: string;
+  tax_amount: string;
+  total_amount: string;
+  currency: string;
+  expense_date: string;
+  vendor_name: string;
+  payment_method: ExpensePaymentMethod;
+  reference_number: string;
+  status: ExpenseStatus;
+  receipt_count: number;
+  project: string;
+  project_name: string;
+  recorded_by: string | null;
+  recorded_by_name: string | null;
+  submitted_at: string | null;
+  approved_at: string | null;
+  created_at: string;
+};
+
+export type Expense = ExpenseListItem & {
+  description: string;
+  receipt_photos: ExpenseReceiptPhoto[];
+  notes: string;
+  approved_by: string | null;
+  approved_by_name: string | null;
+  rejected_at: string | null;
+  rejection_reason: string;
+  reimbursed_at: string | null;
+  updated_at: string;
+};
+
+export type ExpenseWriteInput = {
+  title: string;
+  description?: string;
+  category?: ExpenseCategory;
+  amount: string | number;
+  tax_amount?: string | number;
+  currency?: string;
+  expense_date: string;
+  vendor_name?: string;
+  payment_method?: ExpensePaymentMethod;
+  reference_number?: string;
+  receipt_photos?: ExpenseReceiptPhoto[];
+  notes?: string;
+};
+
+export type ExpenseDashboard = {
+  total_expenses: number;
+  by_status: {
+    draft: number;
+    submitted: number;
+    approved: number;
+    rejected: number;
+    reimbursed: number;
+  };
+  total_amount: string;
+  approved_amount: string;
+  pending_approval_amount: string;
+  by_category: { category: string; count: number; amount: string }[];
+};
+
+/** Client portal (FE Phase 17) */
+
+export type ClientPortalProject = {
+  id: string;
+  name: string;
+  code: string;
+  status: string;
+  project_type: string;
+  progress_percent: number;
+  planned_start_date: string | null;
+  planned_end_date: string | null;
+  site_name: string | null;
+  project_manager_name: string | null;
+  days_remaining: number | null;
+  budget_total?: string;
+  budget_spent?: string;
+  currency?: string;
+};
+
+export type ClientPortalDashboard = {
+  assigned_projects: number;
+  average_progress: number;
+  active_projects: number;
+  completed_projects: number;
+  projects: ClientPortalProject[];
+};
+
+export type ClientPortalBudget = {
+  total: string;
+  spent: string;
+  remaining: string;
+  utilization_percent: number;
+};
+
+export type ClientPortalOverview = {
+  id: string;
+  name: string;
+  code: string;
+  status: string;
+  project_type: string;
+  description: string;
+  progress_percent: number;
+  planned_start_date: string | null;
+  planned_end_date: string | null;
+  actual_start_date: string | null;
+  days_remaining: number | null;
+  site_name: string | null;
+  project_manager_name: string | null;
+  currency: string;
+  budget?: ClientPortalBudget;
+  stats: {
+    tasks_total: number;
+    tasks_completed: number;
+    approved_diary_entries: number;
+    shared_photos: number;
+  };
+};
+
+export type ClientPortalTimelineItem = {
+  id: string;
+  entry_date: string;
+  title: string;
+  summary: string;
+  progress_percent: number;
+  photo_count: number;
+  has_issues: boolean;
+};
+
+export type ClientPortalPhoto = {
+  id: string;
+  source: "library" | "diary" | string;
+  title: string;
+  url: string;
+  captured_at: string;
+};
+
+export type ClientPortalMilestone = {
+  id: string;
+  title: string;
+  status: string;
+  priority: string;
+  due_date: string | null;
+  assignee_name: string | null;
+  completed: boolean;
+};
+
+export type ClientAccessGrant = {
+  id: string;
+  client_user_id: string;
+  client_user_name: string;
+  client_user_email: string;
+  can_view_budget: boolean;
+  is_active: boolean;
+  granted_at: string;
+};
+
+/** Scheduling / Gantt (FE Phase 18) */
+
+export type ScheduleItemStatus =
+  | "not_started"
+  | "in_progress"
+  | "completed"
+  | "delayed"
+  | "on_hold"
+  | string;
+
+export type ScheduleDependencyType =
+  | "finish_to_start"
+  | "start_to_start"
+  | "finish_to_finish"
+  | "start_to_finish"
+  | string;
+
+export type SchedulePhase = {
+  id: string;
+  name: string;
+  color: string;
+  sort_order: number;
+};
+
+export type ScheduleItem = {
+  id: string;
+  phase_id: string | null;
+  phase_name: string | null;
+  title: string;
+  description: string;
+  start_date: string;
+  end_date: string;
+  duration_days: number;
+  progress_percent: number;
+  status: ScheduleItemStatus;
+  color: string;
+  sort_order: number;
+  is_milestone: boolean;
+  assignee_id: string | null;
+  assignee_name: string | null;
+  linked_task_id: string | null;
+};
+
+export type ScheduleDependency = {
+  id: number;
+  predecessor_id: string;
+  successor_id: string;
+  dependency_type: ScheduleDependencyType;
+  lag_days: number;
+};
+
+export type ScheduleGanttSummary = {
+  total_items: number;
+  completed_items: number;
+  delayed_items: number;
+  milestones: number;
+  overall_progress: number;
+};
+
+export type ScheduleGantt = {
+  project_id: string;
+  project_name: string;
+  timeline_start: string | null;
+  timeline_end: string | null;
+  phases: SchedulePhase[];
+  items: ScheduleItem[];
+  dependencies: ScheduleDependency[];
+  summary: ScheduleGanttSummary;
+};
+
+export type ScheduleDashboard = {
+  total_items: number;
+  completed_items: number;
+  in_progress_items: number;
+  delayed_items: number;
+  overdue_items: number;
+  upcoming_starts_14d: number;
+  project_progress_percent: number;
+};
+
+export type ScheduleItemWriteInput = {
+  title: string;
+  description?: string;
+  phase_id?: string | null;
+  start_date: string;
+  end_date: string;
+  progress_percent?: number;
+  status?: ScheduleItemStatus;
+  color?: string;
+  sort_order?: number;
+  is_milestone?: boolean;
+  assignee_id?: string | null;
+  linked_task_id?: string | null;
+};
+

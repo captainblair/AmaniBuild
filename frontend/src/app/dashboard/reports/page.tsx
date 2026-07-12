@@ -1,12 +1,20 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { Suspense } from "react";
+import { ReportsPage } from "@/components/reports/ReportsPage";
+import { Spinner } from "@/components/ui/Spinner";
+import "@/styles/reports.css";
 
 export const metadata = { title: "Reports" };
 
-export default function ReportsPlaceholderPage() {
+export default function ReportsRoutePage() {
   return (
-    <ModulePlaceholder
-      title="Reports"
-      description="The analytics hub and report templates land in a later phase."
-    />
+    <Suspense
+      fallback={
+        <div className="flex justify-center py-16">
+          <Spinner label="Loading reports…" />
+        </div>
+      }
+    >
+      <ReportsPage />
+    </Suspense>
   );
 }

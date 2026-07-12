@@ -1,12 +1,8 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { HelpPage } from "@/components/team/HelpPage";
+import "@/styles/admin.css";
 
-export const metadata = { title: "Help" };
+export const metadata = { title: "Help & Support" };
 
-export default function HelpPlaceholderPage() {
-  return (
-    <ModulePlaceholder
-      title="Help & Support"
-      description="Docs and support chat will live here. For now, reach your AmaniBuild admin."
-    />
-  );
+export default function HelpRoutePage() {
+  return <HelpPage />;
 }

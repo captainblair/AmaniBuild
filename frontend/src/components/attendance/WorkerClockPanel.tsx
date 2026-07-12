@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { AttendanceStatusBadge } from "@/components/attendance/AttendanceStatusBadge";
 import { Button } from "@/components/ui/Button";
+import { OfflineBanner } from "@/components/ui/OfflineBanner";
 import { ApiClientError } from "@/lib/api/client";
 import {
   clockAttendance,
@@ -11,11 +12,32 @@ import {
 } from "@/lib/api/attendance";
 import type { WorkerTodayActivity } from "@/lib/api/types";
 import { formatAttendanceTime } from "@/lib/attendance/labels";
+import {
+  enqueueClockAction,
+  loadClockQueue,
+  saveClockQueue,
+  type QueuedClockAction,
+} from "@/lib/offline/storage";
 
 type Props = {
   projectId: string;
   projectName?: string;
 };
+
+async function readGeo(): Promise<{ latitude?: number; longitude?: number }> {
+  if (typeof navigator === "undefined" || !navigator.geolocation) return {};
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) =>
+        resolve({
+          latitude: Number(pos.coords.latitude.toFixed(6)),
+          longitude: Number(pos.coords.longitude.toFixed(6)),
+        }),
+      () => resolve({}),
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 60_000 },
+    );
+  });
+}
 
 export function WorkerClockPanel({ projectId, projectName }: Props) {
   const [activity, setActivity] = useState<WorkerTodayActivity | null>(null);
@@ -25,6 +47,7 @@ export function WorkerClockPanel({ projectId, projectName }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
   const [notAssigned, setNotAssigned] = useState(false);
+  const [queued, setQueued] = useState(0);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -45,24 +68,77 @@ export function WorkerClockPanel({ projectId, projectName }: Props) {
     }
   }, [projectId]);
 
+  const flushQueue = useCallback(async () => {
+    if (!navigator.onLine) return;
+    const queue = loadClockQueue().filter((q) => q.project_id === projectId);
+    if (queue.length === 0) {
+      setQueued(loadClockQueue().length);
+      return;
+    }
+    const remaining: QueuedClockAction[] = loadClockQueue().filter((q) => q.project_id !== projectId);
+    for (const item of queue) {
+      try {
+        await clockAttendance({
+          project_id: item.project_id,
+          event_type: item.event_type,
+          check_in_point_code: item.check_in_point_code,
+          latitude: item.latitude,
+          longitude: item.longitude,
+        });
+      } catch {
+        remaining.push(item);
+      }
+    }
+    saveClockQueue(remaining);
+    setQueued(remaining.length);
+    await load();
+  }, [projectId, load]);
+
   useEffect(() => {
     void load();
+    setQueued(loadClockQueue().length);
   }, [load]);
+
+  useEffect(() => {
+    function onOnline() {
+      void flushQueue();
+    }
+    window.addEventListener("online", onOnline);
+    return () => window.removeEventListener("online", onOnline);
+  }, [flushQueue]);
 
   async function runClock(eventType: "check_in" | "check_out" | "break_start" | "break_end") {
     setBusy(true);
     setError(null);
     setWarning(null);
+    const geo = await readGeo();
+    const payload = {
+      project_id: projectId,
+      event_type: eventType,
+      check_in_point_code: code.trim() || undefined,
+      ...geo,
+    };
+
+    if (!navigator.onLine) {
+      enqueueClockAction(payload);
+      setQueued(loadClockQueue().length);
+      setWarning("You’re offline — clock action queued on this device.");
+      setBusy(false);
+      return;
+    }
+
     try {
-      const result = await clockAttendance({
-        project_id: projectId,
-        event_type: eventType,
-        check_in_point_code: code.trim() || undefined,
-      });
+      const result = await clockAttendance(payload);
       setActivity(result.activity);
       if (result.warning?.message) setWarning(result.warning.message);
     } catch (err) {
-      setError(err instanceof ApiClientError ? err.message : "Clock action failed.");
+      enqueueClockAction(payload);
+      setQueued(loadClockQueue().length);
+      setError(
+        err instanceof ApiClientError
+          ? `${err.message} (queued to retry)`
+          : "Clock action failed and was queued.",
+      );
     } finally {
       setBusy(false);
     }
@@ -76,10 +152,12 @@ export function WorkerClockPanel({ projectId, projectName }: Props) {
     setBusy(true);
     setError(null);
     setWarning(null);
+    const geo = await readGeo();
     try {
       const result = await qrScanCheckIn({
         project_id: projectId,
         check_in_point_code: code.trim(),
+        ...geo,
       });
       setActivity(result.activity);
       if (result.warning?.message) setWarning(result.warning.message);
@@ -111,6 +189,7 @@ export function WorkerClockPanel({ projectId, projectName }: Props) {
 
   return (
     <section className="dash-panel p-5 space-y-4">
+      <OfflineBanner />
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <h2 className="dash-panel__title">My clock</h2>
@@ -124,6 +203,19 @@ export function WorkerClockPanel({ projectId, projectName }: Props) {
 
       {error ? <p className="att-form-error">{error}</p> : null}
       {warning ? <p className="att-form-warn">{warning}</p> : null}
+      {queued > 0 ? (
+        <p className="att-form-warn">
+          {queued} queued clock action{queued === 1 ? "" : "s"} waiting to sync.
+          {navigator.onLine ? (
+            <>
+              {" "}
+              <button type="button" className="underline" onClick={() => void flushQueue()}>
+                Retry now
+              </button>
+            </>
+          ) : null}
+        </p>
+      ) : null}
 
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="att-stat">
@@ -151,18 +243,48 @@ export function WorkerClockPanel({ projectId, projectName }: Props) {
       </label>
 
       <div className="flex flex-wrap gap-2">
-        <Button type="button" disabled={busy || activity?.on_site_now} onClick={() => void runClock("check_in")}>
+        <Button
+          type="button"
+          className="min-h-11 min-w-[7.5rem]"
+          disabled={busy || activity?.on_site_now}
+          onClick={() => void runClock("check_in")}
+        >
           Check in
         </Button>
         <Button
           type="button"
           variant="outline"
+          className="min-h-11 min-w-[7.5rem]"
           disabled={busy || !activity?.on_site_now}
           onClick={() => void runClock("check_out")}
         >
           Check out
         </Button>
-        <Button type="button" variant="navy" disabled={busy} onClick={() => void runQrScan()}>
+        <Button
+          type="button"
+          variant="outline"
+          className="min-h-11"
+          disabled={busy || !activity?.on_site_now}
+          onClick={() => void runClock("break_start")}
+        >
+          Break start
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="min-h-11"
+          disabled={busy || !activity?.on_site_now}
+          onClick={() => void runClock("break_end")}
+        >
+          Break end
+        </Button>
+        <Button
+          type="button"
+          variant="navy"
+          className="min-h-11"
+          disabled={busy}
+          onClick={() => void runQrScan()}
+        >
           QR check-in
         </Button>
       </div>

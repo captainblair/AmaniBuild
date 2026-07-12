@@ -1,12 +1,8 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { SettingsPage } from "@/components/team/SettingsPage";
+import "@/styles/admin.css";
 
 export const metadata = { title: "Settings" };
 
-export default function SettingsPlaceholderPage() {
-  return (
-    <ModulePlaceholder
-      title="Settings"
-      description="Company and account settings land in a later phase."
-    />
-  );
+export default function SettingsRoutePage() {
+  return <SettingsPage />;
 }

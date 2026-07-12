@@ -2,9 +2,11 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { OfflineBanner } from "@/components/ui/OfflineBanner";
 import { TextInput } from "@/components/ui/TextInput";
 import { ApiClientError } from "@/lib/api/client";
 import { createDiaryEntry, updateDiaryEntry } from "@/lib/api/diary";
+import { uploadLibraryFile } from "@/lib/api/documents";
 import type { DiaryEntry, DiaryEntryWriteInput } from "@/lib/api/types";
 import {
   EQUIPMENT_PRESETS,
@@ -13,6 +15,7 @@ import {
   weatherLabel,
   WEATHER_OPTIONS,
 } from "@/lib/diary/labels";
+import { clearDiaryDraft, loadDiaryDraft, saveDiaryDraft } from "@/lib/offline/storage";
 
 type Props = {
   open: boolean;
@@ -48,8 +51,11 @@ export function DiaryEntryFormModal({
   const [form, setForm] = useState(empty);
   const [labour, setLabour] = useState<string[]>([]);
   const [equipment, setEquipment] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<{ url: string; caption?: string }[]>([]);
+  const [draftHint, setDraftHint] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -71,13 +77,58 @@ export function DiaryEntryFormModal({
       });
       setLabour(initial.labour_activities ?? []);
       setEquipment(initial.equipment_used ?? []);
+      setPhotos(
+        (initial.photos || []).map((p) => ({
+          url: typeof p === "string" ? p : p.url || "",
+          caption: typeof p === "string" ? undefined : p.caption,
+        })).filter((p) => p.url),
+      );
+      setDraftHint(null);
     } else {
-      setForm({ ...empty, entry_date: todayISO() });
-      setLabour([]);
-      setEquipment([]);
+      const date = todayISO();
+      const draft = loadDiaryDraft(projectId, date);
+      if (draft) {
+        setForm({
+          entry_date: draft.entry_date || date,
+          weather_condition: draft.weather_condition || "partly_cloudy",
+          weather_temperature_c: draft.weather_temperature_c || "",
+          workforce_count: draft.workforce_count || "0",
+          working_hours: draft.working_hours || "8",
+          work_description: draft.work_description || "",
+          progress_percent: draft.progress_percent || "0",
+          delays: draft.delays || "",
+          safety_concerns: draft.safety_concerns || "",
+          required_actions: draft.required_actions || "",
+          site_conditions_notes: draft.site_conditions_notes || "",
+        });
+        setLabour(draft.labour || []);
+        setEquipment(draft.equipment || []);
+        setPhotos(draft.photos || []);
+        setDraftHint("Restored a local draft from this device.");
+      } else {
+        setForm({ ...empty, entry_date: date });
+        setLabour([]);
+        setEquipment([]);
+        setPhotos([]);
+        setDraftHint(null);
+      }
     }
     setError(null);
-  }, [open, initial]);
+  }, [open, initial, projectId]);
+
+  useEffect(() => {
+    if (!open || initial) return;
+    const timer = window.setTimeout(() => {
+      saveDiaryDraft(projectId, form.entry_date, {
+        ...form,
+        labour,
+        equipment,
+        photos,
+      });
+      setDraftHint("Draft saved on this device.");
+    }, 700);
+    return () => window.clearTimeout(timer);
+  }, [open, initial, projectId, form, labour, equipment, photos]);
 
   const previewSnippet = useMemo(() => {
     const text = form.work_description.trim();
@@ -92,6 +143,24 @@ export function DiaryEntryFormModal({
 
   function toggleTag(list: string[], value: string, setter: (next: string[]) => void) {
     setter(list.includes(value) ? list.filter((item) => item !== value) : [...list, value]);
+  }
+
+  async function onUploadPhotos(files: FileList | null) {
+    if (!files?.length) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const uploaded: { url: string; caption?: string }[] = [];
+      for (const file of Array.from(files).slice(0, 6)) {
+        const result = await uploadLibraryFile(file);
+        uploaded.push({ url: result.file_url, caption: result.original_name });
+      }
+      setPhotos((current) => [...current, ...uploaded]);
+    } catch (err) {
+      setError(err instanceof ApiClientError ? err.message : "Photo upload failed.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function onSubmit(event: FormEvent) {
@@ -115,11 +184,13 @@ export function DiaryEntryFormModal({
         safety_concerns: form.safety_concerns.trim(),
         required_actions: form.required_actions.trim(),
         site_conditions_notes: form.site_conditions_notes.trim(),
+        photos,
       };
 
       const entry = initial
         ? await updateDiaryEntry(initial.id, payload)
         : await createDiaryEntry(projectId, payload);
+      clearDiaryDraft(projectId, form.entry_date);
       onSaved(entry);
       onClose();
     } catch (err) {
@@ -151,6 +222,9 @@ export function DiaryEntryFormModal({
 
         <div className="diary-modal__layout">
           <div className="diary-modal__body">
+            <OfflineBanner />
+            {draftHint ? <p className="text-xs font-medium text-[var(--gray-500)]">{draftHint}</p> : null}
+
             <div className="diary-form-grid">
               <TextInput
                 label="Entry date"
@@ -260,6 +334,40 @@ export function DiaryEntryFormModal({
             </div>
 
             <div>
+              <label className="mb-1.5 block text-sm font-medium text-[var(--navy)]">
+                Site photos
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                capture="environment"
+                disabled={uploading}
+                onChange={(e) => void onUploadPhotos(e.target.files)}
+              />
+              {uploading ? (
+                <p className="mt-1 text-xs text-[var(--gray-500)]">Uploading…</p>
+              ) : null}
+              {photos.length > 0 ? (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {photos.map((photo) => (
+                    <div key={photo.url} className="relative h-16 w-16 overflow-hidden rounded-lg">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={photo.url} alt={photo.caption || "Site photo"} className="h-full w-full object-cover" />
+                      <button
+                        type="button"
+                        className="absolute right-0.5 top-0.5 rounded bg-black/60 px-1 text-[10px] text-white"
+                        onClick={() => setPhotos((current) => current.filter((p) => p.url !== photo.url))}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
+            <div>
               <label className="mb-1.5 block text-sm font-medium text-[var(--navy)]">Delays</label>
               <textarea
                 className="diary-textarea"
@@ -307,6 +415,7 @@ export function DiaryEntryFormModal({
             <p className="diary-preview__stats">
               {form.workforce_count || 0} workers · {form.working_hours || 0}h ·{" "}
               {form.progress_percent || 0}% progress
+              {photos.length ? ` · ${photos.length} photo${photos.length === 1 ? "" : "s"}` : ""}
             </p>
             <p className="diary-preview__body">{previewSnippet}</p>
             {(labour.length > 0 || equipment.length > 0) && (
@@ -328,8 +437,8 @@ export function DiaryEntryFormModal({
           <Button type="button" variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" disabled={loading}>
-            {loading ? "Saving…" : initial ? "Save draft" : "Save draft"}
+          <Button type="submit" disabled={loading || uploading}>
+            {loading ? "Saving…" : "Save draft"}
           </Button>
         </div>
       </form>

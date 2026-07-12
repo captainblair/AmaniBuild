@@ -35,8 +35,9 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { id: "procurement", label: "Procurement", href: "/dashboard/procurement", permission: "view_procurement" },
       { id: "inventory", label: "Inventory", href: "/dashboard/inventory", permission: "view_inventory" },
-      { id: "equipment", label: "Equipment", href: "/dashboard/equipment", permission: "view_schedule" },
-      { id: "workforce", label: "Workforce", href: "/dashboard/workforce", permission: "view_team" },
+      { id: "expenses", label: "Expenses", href: "/dashboard/expenses", permission: "view_expenses" },
+      { id: "schedule", label: "Schedule", href: "/dashboard/schedule", permission: "view_schedule" },
+      { id: "workforce", label: "Workforce", href: "/dashboard/users", permission: "view_team" },
     ],
   },
   {
@@ -68,7 +69,7 @@ const MOBILE_BY_ROLE: Record<string, MobileTab[]> = {
   owner: [
     { id: "home", label: "Overview", href: "/dashboard" },
     { id: "projects", label: "Projects", href: "/dashboard/projects" },
-    { id: "workforce", label: "Teams", href: "/dashboard/workforce" },
+    { id: "users", label: "Teams", href: "/dashboard/users" },
     { id: "reports", label: "Reports", href: "/dashboard/reports" },
     { id: "more", label: "More", href: "/dashboard/more" },
   ],
@@ -99,6 +100,24 @@ const MOBILE_BY_ROLE: Record<string, MobileTab[]> = {
     { id: "tasks", label: "Tasks", href: "/dashboard/tasks" },
     { id: "diary", label: "Diary", href: "/dashboard/diary" },
     { id: "more", label: "More", href: "/dashboard/more" },
+  ],
+  accountant: [
+    { id: "home", label: "Home", href: "/dashboard" },
+    { id: "expenses", label: "Expenses", href: "/dashboard/expenses" },
+    { id: "procurement", label: "Procurement", href: "/dashboard/procurement" },
+    { id: "reports", label: "Reports", href: "/dashboard/reports" },
+    { id: "more", label: "More", href: "/dashboard/more" },
+  ],
+  store_keeper: [
+    { id: "home", label: "Home", href: "/dashboard" },
+    { id: "inventory", label: "Inventory", href: "/dashboard/inventory" },
+    { id: "procurement", label: "Procurement", href: "/dashboard/procurement" },
+    { id: "documents", label: "Docs", href: "/dashboard/documents" },
+    { id: "more", label: "More", href: "/dashboard/more" },
+  ],
+  client: [
+    { id: "home", label: "Portal", href: "/dashboard" },
+    { id: "help", label: "Help", href: "/dashboard/help" },
   ],
 };
 

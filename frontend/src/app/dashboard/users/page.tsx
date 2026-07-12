@@ -1,12 +1,8 @@
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { UsersPage } from "@/components/team/UsersPage";
+import "@/styles/admin.css";
 
 export const metadata = { title: "User Management" };
 
-export default function UsersPlaceholderPage() {
-  return (
-    <ModulePlaceholder
-      title="User Management"
-      description="Invite and manage team members from here in a later phase."
-    />
-  );
+export default function UsersRoutePage() {
+  return <UsersPage />;
 }

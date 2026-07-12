@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ClientAccessPanel } from "@/components/portal/ClientAccessPanel";
 import { ProjectFormModal } from "@/components/projects/ProjectFormModal";
 import { ProjectStatusBadge } from "@/components/projects/ProjectStatusBadge";
 import { Button } from "@/components/ui/Button";
@@ -18,6 +19,7 @@ import { formatProjectDate, statusLabel, typeLabel } from "@/lib/projects/labels
 const TABS = [
   { id: "overview", label: "Overview", href: "" },
   { id: "diary", label: "Site Diary", href: "diary" },
+  { id: "schedule", label: "Schedule", href: "/dashboard/schedule" },
   { id: "tasks", label: "Tasks", href: "/dashboard/tasks" },
   { id: "attendance", label: "Attendance", href: "/dashboard/attendance" },
   { id: "procurement", label: "Procurement", href: "/dashboard/procurement" },
@@ -216,7 +218,9 @@ export function ProjectDetailPage({ projectId }: Props) {
               href={
                 tab.id === "diary"
                   ? `/dashboard/diary?project=${project.id}`
-                  : tab.href
+                  : tab.id === "schedule"
+                    ? `/dashboard/schedule?project=${project.id}`
+                    : tab.href
               }
               className="proj-tabs__item"
             >
@@ -266,6 +270,9 @@ export function ProjectDetailPage({ projectId }: Props) {
               <Link href={`/dashboard/diary?project=${project.id}`} className="dash-quick-link">
                 Site diary
               </Link>
+              <Link href={`/dashboard/schedule?project=${project.id}`} className="dash-quick-link">
+                Schedule / Gantt
+              </Link>
               <Link href="/dashboard/tasks" className="dash-quick-link">
                 Tasks
               </Link>
@@ -292,6 +299,7 @@ export function ProjectDetailPage({ projectId }: Props) {
               <li>Module deep-links open as you build later phases.</li>
             </ul>
           </section>
+          {canManage ? <ClientAccessPanel projectId={project.id} /> : null}
         </aside>
       </div>
 

@@ -128,6 +128,8 @@ export async function clockAttendance(input: {
   event_type: "check_in" | "check_out" | "break_start" | "break_end";
   check_in_point_code?: string;
   notes?: string;
+  latitude?: number;
+  longitude?: number;
 }): Promise<{ activity: WorkerTodayActivity; warning?: { code?: string; message?: string }; event_id?: string }> {
   return apiDataRequest("/attendance/clock/", {
     method: "POST",
@@ -138,6 +140,8 @@ export async function clockAttendance(input: {
 export async function qrScanCheckIn(input: {
   project_id: string;
   check_in_point_code: string;
+  latitude?: number;
+  longitude?: number;
 }): Promise<{
   activity: WorkerTodayActivity;
   recent_scans?: { worker_name: string; event_at: string; location: string }[];
