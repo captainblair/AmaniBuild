@@ -5,6 +5,10 @@ export function getApiBaseUrl(): string {
   return url && url.length > 0 ? url.replace(/\/$/, "") : DEFAULT_API_URL;
 }
 
+export function getGoogleClientId(): string {
+  return process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID?.trim() ?? "";
+}
+
 export function getApiOrigin(): string {
   const base = getApiBaseUrl();
   return base.replace(/\/api\/v1\/?$/, "");

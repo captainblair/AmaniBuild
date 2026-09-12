@@ -121,6 +121,13 @@ export type LoginMfaResponse = {
   tokens: AuthTokens;
 };
 
+export type GoogleAuthResponse = {
+  message: string;
+  is_new_user: boolean;
+  user: AuthUser;
+  tokens: AuthTokens;
+};
+
 export type ForgotPasswordResponse = {
   message: string;
   otp: OtpChallenge | null;

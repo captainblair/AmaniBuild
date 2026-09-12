@@ -1,6 +1,7 @@
 import { apiDataRequest } from "@/lib/api/client";
 import type {
   ForgotPasswordResponse,
+  GoogleAuthResponse,
   LoginMfaResponse,
   LoginResponse,
   MeResponse,
@@ -34,6 +35,14 @@ export async function verifyRegistrationOtp(input: {
   return apiDataRequest<VerifyOtpResponse>("/auth/verify-otp/", {
     method: "POST",
     body: JSON.stringify(input),
+    ...publicAuth,
+  });
+}
+
+export async function loginWithGoogle(idToken: string): Promise<GoogleAuthResponse> {
+  return apiDataRequest<GoogleAuthResponse>("/auth/google/", {
+    method: "POST",
+    body: JSON.stringify({ id_token: idToken }),
     ...publicAuth,
   });
 }

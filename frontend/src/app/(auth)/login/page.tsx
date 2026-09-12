@@ -10,6 +10,7 @@ import { TextInput } from "@/components/ui/TextInput";
 import { ApiClientError } from "@/lib/api/client";
 import { login, persistSession, postAuthRedirectPath } from "@/lib/api/auth";
 import { setPendingOtp } from "@/lib/auth/otp-session";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { LogoMark } from "@/components/ui/Logo";
 
 export default function LoginPage() {
@@ -89,6 +90,10 @@ export default function LoginPage() {
             {loading ? "Signing in…" : "Sign In"}
           </Button>
         </form>
+
+        <div className="mt-5">
+          <GoogleSignInButton text="signin_with" />
+        </div>
 
         <p className="mt-6 text-center text-sm text-[var(--gray-500)]">
           New to AmaniBuild?{" "}

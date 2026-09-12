@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { TextInput } from "@/components/ui/TextInput";
 import { ApiClientError } from "@/lib/api/client";
 import { registerAccount } from "@/lib/api/auth";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { setPendingOtp } from "@/lib/auth/otp-session";
 
 export default function RegisterPage() {
@@ -127,6 +128,10 @@ export default function RegisterPage() {
             {loading ? "Creating account…" : "Continue"}
           </Button>
         </form>
+
+        <div className="mt-5">
+          <GoogleSignInButton text="signup_with" />
+        </div>
 
         <p className="mt-6 text-center text-sm text-[var(--gray-500)]">
           Already have an account?{" "}
