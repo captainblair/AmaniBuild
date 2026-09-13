@@ -1,3 +1,5 @@
+![AmaniBuild](Amani.png)
+
 # AmaniBuild
 
 **Construction management SaaS for Kenyan builders** — multi-tenant, role-based, API-first.
