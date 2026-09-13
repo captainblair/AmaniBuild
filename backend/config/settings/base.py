@@ -187,17 +187,29 @@ CORS_ALLOW_HEADERS = (
 )
 
 # --- Cache / Celery ---
-REDIS_URL = env("REDIS_URL", default="redis://localhost:6379/0")
+# Empty REDIS_URL = in-memory cache (no Render Key Value / Redis needed).
+REDIS_URL = env("REDIS_URL", default="")
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": REDIS_URL,
+if REDIS_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": REDIS_URL,
+        }
     }
-}
+    CELERY_BROKER_URL = REDIS_URL
+    CELERY_RESULT_BACKEND = REDIS_URL
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        }
+    }
+    CELERY_BROKER_URL = "memory://"
+    CELERY_RESULT_BACKEND = "cache+memory://"
+    CELERY_TASK_ALWAYS_EAGER = True
+    CELERY_TASK_EAGER_PROPAGATES = True
 
-CELERY_BROKER_URL = REDIS_URL
-CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
@@ -286,3 +298,6 @@ AMANIBUILD = {
 
 AMANIBUILD_EXPOSE_OTP = env.bool("AMANIBUILD_EXPOSE_OTP", default=DEBUG)
 AMANIBUILD_EXPOSE_INVITE_TOKEN = env.bool("AMANIBUILD_EXPOSE_INVITE_TOKEN", default=DEBUG)
+
+# Google OAuth (Sign in with Google — ID token audience)
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")

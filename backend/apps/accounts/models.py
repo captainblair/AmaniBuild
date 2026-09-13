@@ -24,6 +24,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     is_email_verified = models.BooleanField(default=False)
     is_phone_verified = models.BooleanField(default=False)
     mfa_enabled = models.BooleanField(default=True)
+    google_id = models.CharField(max_length=255, unique=True, null=True, blank=True, db_index=True)
 
     last_login_at = models.DateTimeField(null=True, blank=True)
     last_login_ip = models.GenericIPAddressField(null=True, blank=True)

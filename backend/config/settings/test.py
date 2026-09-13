@@ -33,3 +33,4 @@ REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {  # noqa: F405
 }
 
 SENTRY_DSN = ""  # noqa: F405
+GOOGLE_CLIENT_ID = "test-google-client.apps.googleusercontent.com"

@@ -12,6 +12,7 @@ from drf_spectacular.utils import extend_schema
 
 from apps.accounts.models import OTPPurpose, User
 from apps.accounts.serializers import (
+    GoogleAuthSerializer,
     LoginMFASerializer,
     LoginSerializer,
     LogoutSerializer,
@@ -24,12 +25,14 @@ from apps.accounts.serializers import (
     VerifyOTPSerializer,
 )
 from apps.accounts.services import (
+    authenticate_google_user,
+    consume_password_reset_token,
     create_otp_challenge,
     create_password_reset_token,
     should_expose_otp_in_response,
+    verify_google_id_token,
     verify_otp_challenge,
     verify_password_reset_token,
-    consume_password_reset_token,
 )
 from apps.accounts.throttles import AuthAnonThrottle
 from apps.core.exceptions import AmaniBuildAPIException
@@ -205,6 +208,38 @@ class LoginMFAView(APIView):
         tokens = _issue_tokens(user)
         return _success(
             {
+                "user": UserSerializer(user).data,
+                "tokens": tokens,
+            }
+        )
+
+
+class GoogleAuthView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+    throttle_classes = [AuthAnonThrottle]
+
+    @extend_schema(request=GoogleAuthSerializer, tags=["Auth"])
+    def post(self, request):
+        serializer = GoogleAuthSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            idinfo = verify_google_id_token(serializer.validated_data["id_token"])
+            user, created = authenticate_google_user(idinfo)
+        except ValueError as exc:
+            raise AmaniBuildAPIException(str(exc), code="invalid_google_token") from exc
+        except Exception as exc:  # noqa: BLE001
+            raise AmaniBuildAPIException(
+                "Google sign-in failed. Please try again.",
+                code="google_unavailable",
+            ) from exc
+
+        tokens = _issue_tokens(user)
+        return _success(
+            {
+                "message": "Account created with Google." if created else "Signed in with Google.",
+                "is_new_user": created,
                 "user": UserSerializer(user).data,
                 "tokens": tokens,
             }

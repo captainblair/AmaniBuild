@@ -9,10 +9,10 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ("email",)
     list_display = ("email", "first_name", "last_name", "phone", "is_active", "is_staff", "created_at")
     list_filter = ("is_active", "is_staff", "is_email_verified", "mfa_enabled")
-    search_fields = ("email", "first_name", "last_name", "phone")
+    search_fields = ("email", "first_name", "last_name", "phone", "google_id")
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal", {"fields": ("first_name", "last_name", "phone")}),
+        ("Personal", {"fields": ("first_name", "last_name", "phone", "google_id")}),
         (
             "Verification",
             {"fields": ("is_active", "is_email_verified", "is_phone_verified", "mfa_enabled")},

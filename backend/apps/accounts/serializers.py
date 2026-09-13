@@ -105,3 +105,7 @@ class ResendOTPSerializer(serializers.Serializer):
 
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
+
+
+class GoogleAuthSerializer(serializers.Serializer):
+    id_token = serializers.CharField()

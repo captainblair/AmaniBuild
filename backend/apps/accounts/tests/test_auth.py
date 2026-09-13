@@ -137,3 +137,86 @@ def test_logout_blacklists_refresh_token(api_client, user_data):
         HTTP_AUTHORIZATION=f"Bearer {access}",
     )
     assert logout.status_code == 200
+
+
+@pytest.mark.django_db
+def test_google_auth_creates_new_user(api_client, monkeypatch):
+    def fake_verify(_token):
+        return {
+            "sub": "google-user-123",
+            "email": "wambui@example.com",
+            "email_verified": True,
+            "given_name": "Wambui",
+            "family_name": "Kamau",
+            "iss": "https://accounts.google.com",
+        }
+
+    monkeypatch.setattr("apps.accounts.views.verify_google_id_token", fake_verify)
+
+    response = api_client.post(
+        reverse("auth-google"),
+        {"id_token": "fake-google-id-token"},
+        format="json",
+    )
+    assert response.status_code == 200
+    data = response.data["data"]
+    assert data["is_new_user"] is True
+    assert data["tokens"]["access"]
+    assert data["user"]["email"] == "wambui@example.com"
+    assert data["user"]["is_email_verified"] is True
+
+    user = User.objects.get(email="wambui@example.com")
+    assert user.google_id == "google-user-123"
+    assert user.is_active is True
+    assert user.has_usable_password() is False
+
+
+@pytest.mark.django_db
+def test_google_auth_links_existing_email_account(api_client, user_data, monkeypatch):
+    otp = _register_and_get_otp(api_client, user_data)
+    api_client.post(
+        reverse("auth-verify-otp"),
+        {"challenge_id": otp["challenge_id"], "code": otp["debug_otp"]},
+        format="json",
+    )
+
+    def fake_verify(_token):
+        return {
+            "sub": "google-existing-456",
+            "email": user_data["email"],
+            "email_verified": True,
+            "given_name": "David",
+            "family_name": "Mwangi",
+            "iss": "https://accounts.google.com",
+        }
+
+    monkeypatch.setattr("apps.accounts.views.verify_google_id_token", fake_verify)
+
+    response = api_client.post(
+        reverse("auth-google"),
+        {"id_token": "fake-google-id-token"},
+        format="json",
+    )
+    assert response.status_code == 200
+    assert response.data["data"]["is_new_user"] is False
+    assert response.data["data"]["tokens"]["access"]
+
+    user = User.objects.get(email=user_data["email"])
+    assert user.google_id == "google-existing-456"
+    assert User.objects.filter(email=user_data["email"]).count() == 1
+
+
+@pytest.mark.django_db
+def test_google_auth_rejects_unverified_email(api_client, monkeypatch):
+    def fake_verify(_token):
+        raise ValueError("Google email is not verified.")
+
+    monkeypatch.setattr("apps.accounts.views.verify_google_id_token", fake_verify)
+
+    response = api_client.post(
+        reverse("auth-google"),
+        {"id_token": "fake-google-id-token"},
+        format="json",
+    )
+    assert response.status_code == 400
+    assert response.data["success"] is False

@@ -155,3 +155,73 @@ def consume_password_reset_token(record: PasswordResetToken) -> None:
 
 def should_expose_otp_in_response() -> bool:
     return getattr(settings, "AMANIBUILD_EXPOSE_OTP", settings.DEBUG)
+
+
+def verify_google_id_token(token: str) -> dict:
+    """Verify a Google ID token and return the payload. Raises ValueError on failure."""
+    client_id = getattr(settings, "GOOGLE_CLIENT_ID", "")
+    if not client_id:
+        raise ValueError("Google sign-in is not configured.")
+
+    try:
+        from google.auth.transport import requests as google_requests
+        from google.oauth2 import id_token
+    except ImportError as exc:
+        raise ValueError("Google sign-in is not available on this server.") from exc
+
+    try:
+        payload = id_token.verify_oauth2_token(token, google_requests.Request(), client_id)
+    except Exception as exc:  # noqa: BLE001
+        raise ValueError("Invalid Google token.") from exc
+
+    issuer = payload.get("iss")
+    if issuer not in ("accounts.google.com", "https://accounts.google.com"):
+        raise ValueError("Invalid Google token issuer.")
+    if not payload.get("email"):
+        raise ValueError("Google account did not provide an email address.")
+    if not payload.get("email_verified"):
+        raise ValueError("Google email is not verified.")
+    return payload
+
+
+def authenticate_google_user(idinfo: dict) -> tuple[User, bool]:
+    """Find or create a user from a verified Google token payload."""
+    google_id = str(idinfo["sub"])
+    email = str(idinfo["email"]).lower()
+    first_name = (idinfo.get("given_name") or "").strip()
+    last_name = (idinfo.get("family_name") or "").strip()
+    if not first_name and idinfo.get("name"):
+        parts = str(idinfo["name"]).split(" ", 1)
+        first_name = parts[0]
+        last_name = parts[1] if len(parts) > 1 else last_name
+
+    user = User.objects.filter(google_id=google_id).first()
+    if user:
+        return user, False
+
+    user = User.objects.filter(email__iexact=email).first()
+    if user:
+        user.google_id = google_id
+        user.is_active = True
+        user.is_email_verified = True
+        update_fields = ["google_id", "is_active", "is_email_verified", "updated_at"]
+        if not user.first_name and first_name:
+            user.first_name = first_name
+            update_fields.append("first_name")
+        if not user.last_name and last_name:
+            user.last_name = last_name
+            update_fields.append("last_name")
+        user.save(update_fields=update_fields)
+        return user, False
+
+    user = User.objects.create_user(
+        email=email,
+        password=None,
+        first_name=first_name,
+        last_name=last_name,
+        google_id=google_id,
+        is_active=True,
+        is_email_verified=True,
+        mfa_enabled=False,
+    )
+    return user, True

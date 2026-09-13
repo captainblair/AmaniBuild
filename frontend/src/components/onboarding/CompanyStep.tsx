@@ -53,7 +53,7 @@ export function CompanyStep({ plans, onDone }: CompanyStepProps) {
       });
       onDone(result.company);
     } catch (err) {
-      setError(err instanceof ApiClientError ? err.message : "Could not create company.");
+      setError(err instanceof ApiClientError ? err.message : "Could not create company. Check the API is running.");
     } finally {
       setLoading(false);
     }

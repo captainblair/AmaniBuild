@@ -107,10 +107,19 @@ export async function apiRequest<T>(
       if (token) headers.set("Authorization", `Bearer ${token}`);
     }
 
-    const response = await fetch(url, {
-      ...options,
-      headers,
-    });
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        ...options,
+        headers,
+      });
+    } catch {
+      throw new ApiClientError(
+        "Cannot reach the API. Start the backend with python manage.py runserver.",
+        "network_error",
+        0,
+      );
+    }
 
     if (response.status === 401 && authEnabled && retryOnUnauthorized) {
       const refreshed = await refreshAccessToken();
